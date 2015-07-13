@@ -1,19 +1,19 @@
 from pycalc.misc import Peeker
+from pycalc.lang import reserved_chars
 
-reserved = ['=', '+', '-', '*', '/', '^', '(', ')', '|']
 
 def generate_tokens(line, start=0):
     if start < len(line):
         token = line[start]
         if token == ' ':
             yield from generate_tokens(line, start + 1)
-        elif token in reserved:
+        elif token in reserved_chars:
             yield token, start, start + 1
             yield from generate_tokens(line, start + 1)
         else:
             end = start + 1
             while end < len(line):
-                if line[end] in reserved or line[end] == ' ':
+                if line[end] in reserved_chars or line[end] == ' ':
                     break
                 end += 1
             yield line[start:end], start, end

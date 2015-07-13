@@ -1,5 +1,7 @@
 import re
 
+reserved_chars = ['=', '+', '-', '*', '/', '^', '(', ')', '|']
+
 functions = ['exp', 'log', 'cos', 'sin', 'tan']
 
 def is_function(token):
