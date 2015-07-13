@@ -1,7 +1,7 @@
 '''
 The grammar for the PyCalc language is as follows:
 
-start ::= add_or_sub
+begin ::= add_or_sub
 
 add_or_sub ::= mul_or_div (('+'|'-') mul_or_div)*
 
@@ -15,9 +15,9 @@ atom ::= function | variable | int_number | float_number | enclosure
 
 enclosure ::= parentheses | absolute_value
 
-parentheses ::= '(' start ')'
+parentheses ::= '(' begin ')'
 
-absolute_value ::= '|' start '|'
+absolute_value ::= '|' begin '|'
 
 function ::= <valid function name> enclosure
 
@@ -40,12 +40,13 @@ class ParseException(Exception):
         super.start = start
         super.end = end
 
+
 class Parser(object):
     def parse(self, line):
         self.tokenizer = Tokenizer(line)
-        self.tree = self.start()
+        self.tree = self.begin()
     
-    def start(self):
+    def begin(self):
         return self.add_or_sub()
     
     def add_or_sub(self):
@@ -142,7 +143,7 @@ class Parser(object):
             raise Exception #TODO: Handle exception
     
     def parentheses(self):
-        tree = self.start()
+        tree = self.begin()
         if self.tokenizer.has_next():
             token, _, _ = self.tokenizer.peek()
             if token == ')':
@@ -154,7 +155,7 @@ class Parser(object):
             raise Exception #TODO: Handle exception
     
     def absolute_value(self):
-        tree = self.start()
+        tree = self.begin()
         if self.tokenizer.has_next():
             token, _, _ = self.tokenizer.peek()
             if token == '|':
