@@ -28,7 +28,7 @@ int_number ::= <int>
 float_number ::= <float>
 '''
 from src.tokenizer import Tokenizer
-from src.tree import BinaryOperation, Value
+from src.tree import BinaryOperation, UnaryFunction, Value
 
 class Parser(object):
     def parse(self, line):
@@ -85,10 +85,27 @@ class Parser(object):
             return first_tree
     
     def negative(self):
-        return self.exponent()
+        if self.tokens.has_next():
+            token, _, _ = self.tokens.peek()
+            if token == '-':
+                next(self.tokens)
+                tree = self.negative()
+                return UnaryFunction(token, tree)
+            else:
+                return self.exponent()
+            pass
+        else:
+            raise Exception #TODO: handle exception
     
     def exponent(self):
-        return self.atom()
+        left_tree = self.atom()
+        if self.tokens.has_next():
+            token, _, _ = self.tokens.peek()
+            if token == '^':
+                next(self.tokens)
+                right_tree = self.negative()
+                return BinaryOperation(token, left_tree, right_tree)
+        return left_tree
     
     def atom(self):
         return self.int_number()
