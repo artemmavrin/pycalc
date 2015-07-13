@@ -28,7 +28,7 @@ int_number ::= <int>
 float_number ::= <float>
 '''
 from src.tokenizer import Tokenizer
-from src.tree import BinaryOperation, UnaryFunction, Value
+from src.tree import BinaryOperation, UnaryFunction, Value, Variable
 import re
 
 functions = ['exp', 'log', 'cos', 'sin', 'tan']
@@ -54,7 +54,6 @@ def is_float(token):
         return True
     except ValueError:
         return False
-
 
 
 class Parser(object):
@@ -135,26 +134,64 @@ class Parser(object):
         return left_tree
     
     def atom(self):
-        return self.int_number()
+        token, _, _ = self.tokens.peek()
+        if is_function(token):
+            return self.function()
+        elif is_variable(token):
+            return self.variable()
+        elif is_int(token):
+            return self.int_number()
+        elif is_float(token):
+            return self.float_number()
+        else:
+            return self.enclosure()
     
     def enclosure(self):
-        pass
+        token, _, _ = self.tokens.peek()
+        if token == '(':
+            next(self.tokens)
+            return self.parentheses()
+        elif token == '|':
+            next(self.tokens)
+            return self.absolute_value()
+        else:
+            raise Exception #TODO: Handle exception
     
     def parentheses(self):
-        pass
+        tree = self.start()
+        if self.tokens.has_next():
+            token, _, _ = self.tokens.peek()
+            if token == ')':
+                return tree
+            else:
+                raise Exception #TODO: Handle exception
+        else:
+            raise Exception #TODO: Handle exception
     
     def absolute_value(self):
-        pass
+        tree = self.start()
+        if self.tokens.has_next():
+            token, _, _ = self.tokens.peek()
+            if token == '|':
+                return UnaryFunction('abs', tree)
+            else:
+                raise Exception #TODO: Handle exception
+        else:
+            raise Exception #TODO: Handle exception
     
     def function(self):
-        pass
+        token, _, _ = next(self.tokens)
+        tree = self.enclosure()
+        return UnaryFunction(token, tree)
     
     def variable(self):
-        pass
+        token, _, _ = next(self.tokens)
+        return Variable(token)
     
     def int_number(self):
         token, _, _ = next(self.tokens)
         return Value(int(token))
     
     def float_number(self):
-        pass
+        token, _, _ = next(self.tokens)
+        return Value(float(token))
