@@ -162,6 +162,7 @@ class Parser(object):
         if self.tokens.has_next():
             token, _, _ = self.tokens.peek()
             if token == ')':
+                next(self.tokens)
                 return tree
             else:
                 raise Exception #TODO: Handle exception
@@ -173,6 +174,7 @@ class Parser(object):
         if self.tokens.has_next():
             token, _, _ = self.tokens.peek()
             if token == '|':
+                next(self.tokens)
                 return UnaryFunction('abs', tree)
             else:
                 raise Exception #TODO: Handle exception
