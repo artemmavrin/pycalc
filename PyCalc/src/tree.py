@@ -15,3 +15,17 @@ class AST(metaclass=ABCMeta):
     
     def __repr__(self):
         return self.postfix()
+
+
+class Branch(AST):
+    def __init__(self, f, identifier, *args):
+        self.f = f
+        self.identifier = identifier
+        self.args = args
+    
+    def evaluate(self):
+        return self.f(*(arg.evaluate() for arg in self.args))
+    
+    def postfix(self):
+        arguments = ' '.join(arg.postfix() for arg in self.args)
+        return '(' + arguments + ') ' + self.identifier
