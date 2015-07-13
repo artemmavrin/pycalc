@@ -32,7 +32,13 @@ from src.tokenizer import Tokenizer
 from src.tree import BinaryOperation, UnaryFunction, Value, Variable
 
 
-
+class ParseException(Exception):
+    def __init__(self, message, line, token, start, end):
+        super().__init__(message)
+        super.line = line
+        super.token = token
+        super.start = start
+        super.end = end
 
 class Parser(object):
     def parse(self, line):
