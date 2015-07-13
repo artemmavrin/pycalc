@@ -51,7 +51,7 @@ class Branch(AST):
         return '(' + arguments + ') ' + self.identifier
     
 
-class BinaryOperation(AST):
+class BinaryOperation(Branch):
     def __init__(self, op_symbol, left, right):
         if op_symbol in bin_ops:
             bin_op = bin_ops[op_symbol]
@@ -60,7 +60,7 @@ class BinaryOperation(AST):
             raise ValueError('Illegal binary operation: ' + op_symbol)
 
 
-class UnaryFunctions(AST):
+class UnaryFunctions(Branch):
     def __init__(self, function_name, argument):
         if function_name in functions:
             function = functions[function_name]
