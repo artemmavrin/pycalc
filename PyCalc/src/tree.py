@@ -1,4 +1,6 @@
 from abc import ABCMeta, abstractmethod
+from operator import add, sub, mul, truediv, pow, neg
+from math import exp, log, cos, sin, tan
 
 class AST(metaclass=ABCMeta):
     @abstractmethod
@@ -29,3 +31,39 @@ class Branch(AST):
     def postfix(self):
         arguments = ' '.join(arg.postfix() for arg in self.args)
         return '(' + arguments + ') ' + self.identifier
+
+
+bin_ops = {
+           '+': add,
+           '-': sub,
+           '*': mul,
+           '/': truediv,
+           '^': pow
+           }
+
+functions = {
+             '-': neg,
+             'abs': abs,
+             'exp': exp,
+             'log': log,
+             'cos': cos,
+             'sin': sin,
+             'tan': tan
+             }
+
+class BinaryOperation(AST):
+    def __init__(self, op_symbol, left, right):
+        if op_symbol in bin_ops:
+            bin_op = bin_ops[op_symbol]
+            super().__init__(bin_op, op_symbol, left, right)
+        else:
+            raise ValueError('Illegal binary operation: ' + op_symbol)
+
+
+class UnaryFunctions(AST):
+    def __init__(self, function_name, argument):
+        if function_name in functions:
+            function = functions[function_name]
+            super().__init__(function, function_name, argument)
+        else:
+            raise ValueError('Illegal function: ' + function_name)
