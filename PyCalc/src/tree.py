@@ -80,10 +80,31 @@ class Leaf(AST, metaclass=ABCMeta):
     def evaluate(self):
         return self.value
     
-    @abstractmethod
     def set_variables(self, variables):
-        pass
+        return True
     
-    @abstractmethod
     def postfix(self):
-        pass
+        return self.name
+
+
+class Value(Leaf):
+    def __init__(self, value):
+        super().__init__(str(value), value)
+
+
+class Variable(Leaf):
+    def __init__(self, name):
+        super().__init__(name, None)
+    
+    def evaluate(self):
+        if self.value is not None:
+            return self.value
+        else:
+            raise Exception('The variable ' + self.name + ' has no value.')
+    
+    def set_variables(self, variables):
+        if self.name in variables:
+            self.value = variables[self.name]
+            return True
+        else:
+            return False
