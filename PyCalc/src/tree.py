@@ -63,7 +63,7 @@ class BinaryOperation(Branch):
             raise ValueError('Illegal binary operation: ' + op_symbol)
 
 
-class UnaryFunctions(Branch):
+class UnaryFunction(Branch):
     def __init__(self, function_name, argument):
         if function_name in functions:
             function = functions[function_name]
