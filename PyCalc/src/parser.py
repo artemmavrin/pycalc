@@ -1,5 +1,3 @@
-from src.tokenizer import Tokenizer
-
 '''
 The grammar for the PyCalc language is as follows:
 
@@ -29,6 +27,8 @@ int_number ::= <int>
 
 float_number ::= <float>
 '''
+from src.tokenizer import Tokenizer
+from src.tree import BinaryOperation, Value
 
 class Parser(object):
     def parse(self, line):
@@ -36,22 +36,42 @@ class Parser(object):
         self.tree = self.start()
     
     def start(self):
-        pass
+        return self.add_or_sub()
     
     def add_or_sub(self):
-        pass
+        first_tree = self.mul_or_div()
+        ops = []
+        trees = []
+        while True:
+            if self.tokens.has_next():
+                op, _, _ = self.tokens.peek()
+                if op in ('+', '-'):
+                    next(self.tokens)
+                    ops.append(op)
+                    trees.append(self.mul_or_div())
+                else:
+                    break
+            else:
+                break
+        if trees:
+            result_tree = first_tree
+            for op, tree in zip(ops, trees):
+                result_tree = BinaryOperation(op, result_tree, tree)
+            return result_tree
+        else:
+            return first_tree
     
     def mul_or_div(self):
-        pass
+        return self.negative()
     
     def negative(self):
-        pass
+        return self.exponent()
     
     def exponent(self):
-        pass
+        return self.atom()
     
     def atom(self):
-        pass
+        return self.int_number()
     
     def enclosure(self):
         pass
@@ -69,7 +89,8 @@ class Parser(object):
         pass
     
     def int_number(self):
-        pass
+        token, _, _ = next(self.tokens)
+        return Value(int(token))
     
     def float_number(self):
         pass
