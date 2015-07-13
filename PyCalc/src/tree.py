@@ -2,6 +2,24 @@ from abc import ABCMeta, abstractmethod
 from operator import add, sub, mul, truediv, pow, neg
 from math import exp, log, cos, sin, tan
 
+bin_ops = {
+           '+': add,
+           '-': sub,
+           '*': mul,
+           '/': truediv,
+           '^': pow
+           }
+
+functions = {
+             '-': neg,
+             'abs': abs,
+             'exp': exp,
+             'log': log,
+             'cos': cos,
+             'sin': sin,
+             'tan': tan
+             }
+
 class AST(metaclass=ABCMeta):
     @abstractmethod
     def evaluate(self):
@@ -31,25 +49,7 @@ class Branch(AST):
     def postfix(self):
         arguments = ' '.join(arg.postfix() for arg in self.args)
         return '(' + arguments + ') ' + self.identifier
-
-
-bin_ops = {
-           '+': add,
-           '-': sub,
-           '*': mul,
-           '/': truediv,
-           '^': pow
-           }
-
-functions = {
-             '-': neg,
-             'abs': abs,
-             'exp': exp,
-             'log': log,
-             'cos': cos,
-             'sin': sin,
-             'tan': tan
-             }
+    
 
 class BinaryOperation(AST):
     def __init__(self, op_symbol, left, right):
