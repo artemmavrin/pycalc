@@ -45,6 +45,7 @@ class ParseException(Exception):
 
 class Parser(object):
     def parse(self, line):
+        self.line = line
         self.tokenizer = Tokenizer(line)
         self.tree = self.begin()
     
@@ -151,24 +152,26 @@ class Parser(object):
     def parentheses(self):
         tree = self.begin()
         if self.tokenizer.has_next():
-            token, _, _ = self.tokenizer.peek()
+            token, start, end = self.tokenizer.peek()
             if token == ')':
                 next(self.tokenizer)
                 return tree
             else:
-                raise Exception #TODO: Handle exception
+                message = 'Expected closing parenthesis, but found ' + token
+                raise ParseException(message, self.line, token, start, end)
         else:
             raise Exception #TODO: Handle exception
     
     def absolute_value(self):
         tree = self.begin()
         if self.tokenizer.has_next():
-            token, _, _ = self.tokenizer.peek()
+            token, start, end = self.tokenizer.peek()
             if token == '|':
                 next(self.tokenizer)
                 return UnaryFunction('abs', tree)
             else:
-                raise Exception #TODO: Handle exception
+                message = 'Expected closing absolute value delimiter, but found ' + token
+                raise ParseException(message, self.line, token, start, end)
         else:
             raise Exception #TODO: Handle exception
     
