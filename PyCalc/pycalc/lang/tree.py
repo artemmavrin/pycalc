@@ -1,6 +1,6 @@
 from abc import ABCMeta, abstractmethod
 from operator import add, sub, mul, truediv, pow, neg
-from math import exp, log, cos, sin, tan
+from math import exp, log, cos, sin, tan, factorial
 
 bin_ops = {
            '+': add,
@@ -17,7 +17,8 @@ functions = {
              'log': log,
              'cos': cos,
              'sin': sin,
-             'tan': tan
+             'tan': tan,
+             '!': factorial
              }
 
 class AST(metaclass=ABCMeta):
