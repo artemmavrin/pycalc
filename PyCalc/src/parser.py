@@ -9,7 +9,9 @@ mul_or_div ::= negative (('*'|'/') negative)*
 
 negative ::= exponent | '-' negative
 
-exponent ::= atom | atom '^' negative
+exponent ::= factorial | factorial '^' negative
+
+factorial ::= atom
 
 atom ::= function | variable | int_number | float_number | enclosure
 
@@ -109,7 +111,7 @@ class Parser(object):
             raise Exception #TODO: handle exception
     
     def exponent(self):
-        left_tree = self.atom()
+        left_tree = self.factorial()
         if self.tokenizer.has_next():
             token, _, _ = self.tokenizer.peek()
             if token == '^':
@@ -117,6 +119,10 @@ class Parser(object):
                 right_tree = self.negative()
                 return BinaryOperation(token, left_tree, right_tree)
         return left_tree
+    
+    def factorial(self):
+        #TODO: Implement grammar rule
+        return self.atom()
     
     def atom(self):
         token, _, _ = self.tokenizer.peek()
