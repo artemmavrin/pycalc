@@ -37,7 +37,7 @@ class AST(metaclass=ABCMeta):
         return self.postfix()
 
 
-class Branch(AST):
+class Branch(AST, metaclass=ABCMeta):
     def __init__(self, f, identifier, *args):
         self.f = f
         self.identifier = identifier
@@ -45,6 +45,9 @@ class Branch(AST):
     
     def evaluate(self):
         return self.f(*(arg.evaluate() for arg in self.args))
+    
+    def set_variables(self, variables):
+        return all(arg.set_variables(variables) for arg in self.args)
     
     def postfix(self):
         arguments = ' '.join(arg.postfix() for arg in self.args)
@@ -76,6 +79,10 @@ class Leaf(AST, metaclass=ABCMeta):
     
     def evaluate(self):
         return self.value
+    
+    @abstractmethod
+    def set_variables(self, variables):
+        pass
     
     @abstractmethod
     def postfix(self):
