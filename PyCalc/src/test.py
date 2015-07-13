@@ -10,6 +10,9 @@ def ConsoleTest(function):
             if line == quit_command:
                 break
             elif line:
-                function(line)
+                try:
+                    function(line)
+                except Exception:
+                    print('There was an error.')
     
     return new_function
