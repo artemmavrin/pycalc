@@ -42,7 +42,7 @@ class ParseException(Exception):
 
 class Parser(object):
     def parse(self, line):
-        self.tokens = Tokenizer(line)
+        self.tokenizer = Tokenizer(line)
         self.tree = self.start()
     
     def start(self):
@@ -53,11 +53,11 @@ class Parser(object):
         ops = []
         trees = []
         while True:
-            if self.tokens.has_next():
-                op, _, _ = self.tokens.peek()
-                if op in ('+', '-'):
-                    next(self.tokens)
-                    ops.append(op)
+            if self.tokenizer.has_next():
+                token, _, _ = self.tokenizer.peek()
+                if token in ('+', '-'):
+                    next(self.tokenizer)
+                    ops.append(token)
                     trees.append(self.mul_or_div())
                 else:
                     break
@@ -76,11 +76,11 @@ class Parser(object):
         ops = []
         trees = []
         while True:
-            if self.tokens.has_next():
-                op, _, _ = self.tokens.peek()
-                if op in ('*', '/'):
-                    next(self.tokens)
-                    ops.append(op)
+            if self.tokenizer.has_next():
+                token, _, _ = self.tokenizer.peek()
+                if token in ('*', '/'):
+                    next(self.tokenizer)
+                    ops.append(token)
                     trees.append(self.negative())
                 else:
                     break
@@ -95,10 +95,10 @@ class Parser(object):
             return first_tree
     
     def negative(self):
-        if self.tokens.has_next():
-            token, _, _ = self.tokens.peek()
+        if self.tokenizer.has_next():
+            token, _, _ = self.tokenizer.peek()
             if token == '-':
-                next(self.tokens)
+                next(self.tokenizer)
                 tree = self.negative()
                 return UnaryFunction(token, tree)
             else:
@@ -109,16 +109,16 @@ class Parser(object):
     
     def exponent(self):
         left_tree = self.atom()
-        if self.tokens.has_next():
-            token, _, _ = self.tokens.peek()
+        if self.tokenizer.has_next():
+            token, _, _ = self.tokenizer.peek()
             if token == '^':
-                next(self.tokens)
+                next(self.tokenizer)
                 right_tree = self.negative()
                 return BinaryOperation(token, left_tree, right_tree)
         return left_tree
     
     def atom(self):
-        token, _, _ = self.tokens.peek()
+        token, _, _ = self.tokenizer.peek()
         if is_function(token):
             return self.function()
         elif is_variable(token):
@@ -131,22 +131,22 @@ class Parser(object):
             return self.enclosure()
     
     def enclosure(self):
-        token, _, _ = self.tokens.peek()
+        token, _, _ = self.tokenizer.peek()
         if token == '(':
-            next(self.tokens)
+            next(self.tokenizer)
             return self.parentheses()
         elif token == '|':
-            next(self.tokens)
+            next(self.tokenizer)
             return self.absolute_value()
         else:
             raise Exception #TODO: Handle exception
     
     def parentheses(self):
         tree = self.start()
-        if self.tokens.has_next():
-            token, _, _ = self.tokens.peek()
+        if self.tokenizer.has_next():
+            token, _, _ = self.tokenizer.peek()
             if token == ')':
-                next(self.tokens)
+                next(self.tokenizer)
                 return tree
             else:
                 raise Exception #TODO: Handle exception
@@ -155,10 +155,10 @@ class Parser(object):
     
     def absolute_value(self):
         tree = self.start()
-        if self.tokens.has_next():
-            token, _, _ = self.tokens.peek()
+        if self.tokenizer.has_next():
+            token, _, _ = self.tokenizer.peek()
             if token == '|':
-                next(self.tokens)
+                next(self.tokenizer)
                 return UnaryFunction('abs', tree)
             else:
                 raise Exception #TODO: Handle exception
@@ -166,18 +166,18 @@ class Parser(object):
             raise Exception #TODO: Handle exception
     
     def function(self):
-        token, _, _ = next(self.tokens)
+        token, _, _ = next(self.tokenizer)
         tree = self.enclosure()
         return UnaryFunction(token, tree)
     
     def variable(self):
-        token, _, _ = next(self.tokens)
+        token, _, _ = next(self.tokenizer)
         return Variable(token)
     
     def int_number(self):
-        token, _, _ = next(self.tokens)
+        token, _, _ = next(self.tokenizer)
         return Value(int(token))
     
     def float_number(self):
-        token, _, _ = next(self.tokens)
+        token, _, _ = next(self.tokenizer)
         return Value(float(token))
