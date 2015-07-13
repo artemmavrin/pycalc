@@ -67,3 +67,16 @@ class UnaryFunctions(Branch):
             super().__init__(function, function_name, argument)
         else:
             raise ValueError('Illegal function: ' + function_name)
+
+
+class Leaf(AST, metaclass=ABCMeta):
+    def __init__(self, name, value):
+        self.name = name
+        self.value = value
+    
+    def evaluate(self):
+        return self.value
+    
+    @abstractmethod
+    def postfix(self):
+        pass
