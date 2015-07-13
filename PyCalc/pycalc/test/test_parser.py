@@ -1,5 +1,5 @@
-from src.test import ConsoleTest
-from src.parser import Parser
+from pycalc.test import ConsoleTest
+from pycalc.parser import Parser
 
 @ConsoleTest
 def test_parser(line):

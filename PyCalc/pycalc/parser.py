@@ -29,9 +29,9 @@ int_number ::= <int>
 
 float_number ::= <float>
 '''
-from src.lang import is_float, is_function, is_int, is_variable
-from src.tokenizer import Tokenizer
-from src.tree import BinaryOperation, UnaryFunction, Value, Variable
+from pycalc.lang import is_float, is_function, is_int, is_variable
+from pycalc.tokenizer import Tokenizer
+from pycalc.tree import BinaryOperation, UnaryFunction, Value, Variable
 
 
 class ParseException(Exception):

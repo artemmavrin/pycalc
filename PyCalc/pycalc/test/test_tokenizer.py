@@ -1,5 +1,5 @@
-from src.test import ConsoleTest
-from src.tokenizer import generate_tokens, underline_token
+from pycalc.test import ConsoleTest
+from pycalc.tokenizer import generate_tokens, underline_token
 
 @ConsoleTest
 def test_tokenizer(line):
