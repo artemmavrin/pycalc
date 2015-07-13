@@ -1,4 +1,4 @@
-from pycalc.peeker import Peeker
+from pycalc.misc.peeker import Peeker
 
 reserved = ['=', '+', '-', '*', '/', '^', '(', ')', '|']
 
