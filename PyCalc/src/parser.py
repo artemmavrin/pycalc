@@ -62,7 +62,27 @@ class Parser(object):
             return first_tree
     
     def mul_or_div(self):
-        return self.negative()
+        first_tree = self.negative()
+        ops = []
+        trees = []
+        while True:
+            if self.tokens.has_next():
+                op, _, _ = self.tokens.peek()
+                if op in ('*', '/'):
+                    next(self.tokens)
+                    ops.append(op)
+                    trees.append(self.negative())
+                else:
+                    break
+            else:
+                break
+        if trees:
+            result_tree = first_tree
+            for op, tree in zip(ops, trees):
+                result_tree = BinaryOperation(op, result_tree, tree)
+            return result_tree
+        else:
+            return first_tree
     
     def negative(self):
         return self.exponent()
