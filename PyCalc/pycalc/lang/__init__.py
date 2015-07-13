@@ -4,10 +4,10 @@ reserved_chars = ['=', '+', '-', '*', '/', '^', '(', ')', '|']
 
 functions = ['exp', 'log', 'cos', 'sin', 'tan']
 
+variable_regex = re.compile(r'^[a-zA-Z]\w*$')
+
 def is_function(token):
     return token in functions
-
-variable_regex = re.compile(r'^[a-zA-Z]\w*$')
 
 def is_variable(token):
     return bool(variable_regex.match(token))
