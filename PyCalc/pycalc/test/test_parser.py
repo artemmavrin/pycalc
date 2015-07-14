@@ -14,9 +14,6 @@ def test_parser(line):
     else:
         tree = parser.tree
         print(tree)
-        variables = {}
-        if tree.set_variables(variables):
-            print(tree.evaluate())
 
 if __name__ == '__main__':
     test_parser()
