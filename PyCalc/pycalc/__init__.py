@@ -1,7 +1,7 @@
 from math import e, pi
-from lang import is_variable
-from lang.parser import Parser, ParseException
-from lang.tokenizer import underline_token
+from pycalc.lang import is_variable
+from pycalc.lang.parser import Parser, ParseException
+from pycalc.lang.tokenizer import underline_token
 
 default_variable = 'ans'
 
@@ -17,11 +17,12 @@ class Calculator(object):
                  help_command='help',
                  ):
         self.variables = {}
-        self.parser = Parser()
         self.prompt = prompt
         self.quit = quit_command
         self.vars = vars_command
         self.help = help_command
+        self.illegal_vars = [self.quit, self.vars, self.help]
+        self.parser = Parser(self.illegal_vars)
 
     def compute(self, line):
         line = line.strip()
@@ -35,6 +36,10 @@ class Calculator(object):
             lhs = lhs_rhs[0].strip()  # left-hand-side of line
             rhs = lhs_rhs[1].strip()  # right-hand-side of line
             if is_variable(lhs):
+                if lhs in self.illegal_vars:
+                    message = 'Illegal assignment: ' + lhs +\
+                        ' is not a valid variable name.'
+                    raise Exception(message)
                 name = lhs
                 expression = rhs
             else:

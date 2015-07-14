@@ -36,6 +36,9 @@ class ParseException(Exception):
 
 
 class Parser(object):
+    def __init__(self, illegal_vars):
+        self.illegal_vars = illegal_vars
+
     def parse(self, line):
         self.line = line
         self.tokenizer = Tokenizer(line)
@@ -220,7 +223,10 @@ class Parser(object):
         return UnaryFunction(token, tree)
 
     def variable(self):
-        token, _, _ = next(self.tokenizer)
+        token, start, end = next(self.tokenizer)
+        if token in self.illegal_vars:
+            message = 'Illegal variable name: ' + token
+            raise ParseException(message, self.line, token, start, end)
         return Variable(token)
 
     def int_number(self):
