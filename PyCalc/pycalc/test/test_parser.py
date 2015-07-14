@@ -1,6 +1,6 @@
 from pycalc.lang.parser import Parser, ParseException
-from pycalc.test import ConsoleTest
 from pycalc.lang.tokenizer import underline_token
+from pycalc.test import ConsoleTest
 
 
 @ConsoleTest
