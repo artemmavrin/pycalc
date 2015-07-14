@@ -172,11 +172,11 @@ class Parser(object):
             raise ParseException(message, line, token, start, end)
 
     def enclosure(self):
-        token, _, _ = self.tokenizer.peek()
-        if token == '(':
+        self.token, self.start, self.end = self.tokenizer.peek()
+        if self.token == '(':
             next(self.tokenizer)
             return self.parentheses()
-        elif token == '|':
+        elif self.token == '|':
             next(self.tokenizer)
             return self.absolute_value()
         else:
@@ -198,7 +198,7 @@ class Parser(object):
                 message = 'Expected closing parenthesis, but found ' + token
                 raise ParseException(message, self.line, token, start, end)
         else:
-            message = 'Expected token after ' + self.token
+            message = 'Expected closing parenthesis after ' + self.token
             line = self.line
             token = self.token
             start = self.start
@@ -217,7 +217,8 @@ class Parser(object):
                     'but found ' + token
                 raise ParseException(message, self.line, token, start, end)
         else:
-            message = 'Expected token after ' + self.token
+            message = 'Expected closing absolute value delimiter '\
+                'after ' + self.token
             line = self.line
             token = self.token
             start = self.start
