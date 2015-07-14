@@ -1,7 +1,7 @@
 from math import e, pi
-from pycalc.lang.parser import Parser, ParseException
-from pycalc.lang import is_variable
-from pycalc.lang.tokenizer import underline_token
+from lang import is_variable
+from lang.parser import Parser, ParseException
+from lang.tokenizer import underline_token
 
 default_variable = 'ans'
 
