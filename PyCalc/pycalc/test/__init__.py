@@ -1,4 +1,7 @@
 class ConsoleTest(object):
+    '''Decorator for repeatedly executing a function taking a user input in the
+    console.
+    '''
     def __init__(self, f):
         self.f = f
         self.prompt = '> '

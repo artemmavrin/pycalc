@@ -22,7 +22,7 @@ class Peeker(object):
     False
     >>> peeker.peek()
     Traceback (most recent call last):
-      File "<stdin>", line 1, in ?
+    ...
     StopIteration
 
     '''
