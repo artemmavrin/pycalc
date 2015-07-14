@@ -4,13 +4,18 @@ from pycalc.lang import is_variable
 from pycalc.lang.tokenizer import underline_token
 
 default_variable = 'ans'
+
 constants = {'e': e, 'pi': pi}
 
 
 class Calculator(object):
-    def __init__(self):
+
+    def __init__(self, prompt='> ', quit_command='quit', vars_command='vars'):
         self.variables = {}
         self.parser = Parser()
+        self.prompt = prompt
+        self.quit = quit_command
+        self.vars = vars_command
 
     def compute(self, line):
         line = line.strip()
@@ -39,11 +44,26 @@ class Calculator(object):
         else:
             raise Exception('Encountered unknown variable.')
 
+    def print_variables(self):
+        if not self.variables:
+            print('No variables to show.')
+        else:
+            names = sorted(self.variables.keys())
+            name = 'NAME'
+            value = 'VALUE'
+            name_length = max(len(name), max(len(name) for name in names))
+            print(name + (name_length - len(name)) * ' ' + '   ' + value)
+            for name in names:
+                value = str(self.variables[name])
+                print(name + (name_length - len(name)) * ' ' + '   ' + value)
+
     def __call__(self):
         while True:
-            line = input('> ')
-            if line == 'quit':
+            line = input(self.prompt)
+            if line == self.quit:
                 break
+            if line == self.vars:
+                self.print_variables()
             elif line:
                 try:
                     self.compute(line)
