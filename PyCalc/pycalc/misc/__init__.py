@@ -1,5 +1,6 @@
 from itertools import chain
 
+
 class Peeker(object):
     def __init__(self, iterable):
         self.iterable = iter(iterable)
