@@ -2,6 +2,31 @@ from itertools import chain
 
 
 class Peeker(object):
+    '''Class for peeking at the next element of an iterable.
+
+    Example:
+    >>> peeker = Peeker(range(2))
+    >>> peeker.has_next()
+    True
+    >>> peeker.peek()
+    0
+    >>> next(peeker)
+    0
+    >>> peeker.has_next()
+    True
+    >>> peeker.peek()
+    1
+    >>> next(peeker)
+    1
+    >>> peeker.has_next()
+    False
+    >>> peeker.peek()
+    Traceback (most recent call last):
+      File "<stdin>", line 1, in ?
+    StopIteration
+
+    '''
+
     def __init__(self, iterable):
         self.iterable = iter(iterable)
 
