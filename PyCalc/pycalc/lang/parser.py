@@ -126,7 +126,7 @@ class Parser(object):
             if self.token == '^':
                 next(self.tokenizer)
                 right_tree = self.negative()
-                return BinaryOperation(self.token, left_tree, right_tree)
+                return BinaryOperation('^', left_tree, right_tree)
         return left_tree
 
     def factorial(self):
