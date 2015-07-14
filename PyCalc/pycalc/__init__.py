@@ -14,7 +14,8 @@ class Calculator(object):
                  prompt='>>> ',
                  quit_command='quit',
                  vars_command='vars',
-                 help_command='help'):
+                 help_command='help',
+                 ):
         self.variables = {}
         self.parser = Parser()
         self.prompt = prompt
