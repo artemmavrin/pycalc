@@ -36,11 +36,11 @@ from pycalc.lang.tree import BinaryOperation, UnaryFunction, Value, Variable
 
 class ParseException(Exception):
     def __init__(self, message, line, token, start, end):
-        super.message = message
-        super.line = line
-        super.token = token
-        super.start = start
-        super.end = end
+        self.message = message
+        self.line = line
+        self.token = token
+        self.start = start
+        self.end = end
 
     def __str__(self):
         return self.message
@@ -61,10 +61,10 @@ class Parser(object):
         trees = []
         while True:
             if self.tokenizer.has_next():
-                token, _, _ = self.tokenizer.peek()
-                if token in ('+', '-'):
+                self.token, self.start, self.end = self.tokenizer.peek()
+                if self.token in ('+', '-'):
                     next(self.tokenizer)
-                    ops.append(token)
+                    ops.append(self.token)
                     trees.append(self.mul_or_div())
                 else:
                     break
@@ -84,10 +84,10 @@ class Parser(object):
         trees = []
         while True:
             if self.tokenizer.has_next():
-                token, _, _ = self.tokenizer.peek()
-                if token in ('*', '/'):
+                self.token, self.start, self.end = self.tokenizer.peek()
+                if self.token in ('*', '/'):
                     next(self.tokenizer)
-                    ops.append(token)
+                    ops.append(self.token)
                     trees.append(self.negative())
                 else:
                     break
@@ -103,25 +103,30 @@ class Parser(object):
 
     def negative(self):
         if self.tokenizer.has_next():
-            token, _, _ = self.tokenizer.peek()
-            if token == '-':
+            self.token, self.start, self.end = self.tokenizer.peek()
+            if self.token == '-':
                 next(self.tokenizer)
                 tree = self.negative()
-                return UnaryFunction(token, tree)
+                return UnaryFunction(self.token, tree)
             else:
                 return self.exponent()
             pass
         else:
-            raise Exception  # TODO: handle exception
+            message = 'Expected token after ' + self.token
+            line = self.line
+            token = self.token
+            start = self.start
+            end = self.end
+            raise ParseException(message, line, token, start, end)
 
     def exponent(self):
         left_tree = self.factorial()
         if self.tokenizer.has_next():
-            token, _, _ = self.tokenizer.peek()
-            if token == '^':
+            self.token, self.start, self.end = self.tokenizer.peek()
+            if self.token == '^':
                 next(self.tokenizer)
                 right_tree = self.negative()
-                return BinaryOperation(token, left_tree, right_tree)
+                return BinaryOperation(self.token, left_tree, right_tree)
         return left_tree
 
     def factorial(self):
@@ -129,8 +134,8 @@ class Parser(object):
         num_factorial = 0
         while True:
             if self.tokenizer.has_next():
-                token, _, _ = self.tokenizer.peek()
-                if token == '!':
+                self.token, self.start, self.end = self.tokenizer.peek()
+                if self.token == '!':
                     next(self.tokenizer)
                     num_factorial += 1
                 else:
@@ -146,17 +151,25 @@ class Parser(object):
             return first_tree
 
     def atom(self):
-        token, _, _ = self.tokenizer.peek()
-        if is_function(token):
-            return self.function()
-        elif is_variable(token):
-            return self.variable()
-        elif is_int(token):
-            return self.int_number()
-        elif is_float(token):
-            return self.float_number()
+        if self.tokenizer.has_next():
+            self.token, self.start, self.end = self.tokenizer.peek()
+            if is_function(self.token):
+                return self.function()
+            elif is_variable(self.token):
+                return self.variable()
+            elif is_int(self.token):
+                return self.int_number()
+            elif is_float(self.token):
+                return self.float_number()
+            else:
+                return self.enclosure()
         else:
-            return self.enclosure()
+            message = 'Expected token after ' + self.token
+            line = self.line
+            token = self.token
+            start = self.start
+            end = self.end
+            raise ParseException(message, line, token, start, end)
 
     def enclosure(self):
         token, _, _ = self.tokenizer.peek()
@@ -167,7 +180,12 @@ class Parser(object):
             next(self.tokenizer)
             return self.absolute_value()
         else:
-            raise Exception  # TODO: Handle exception
+            message = 'Expected token after ' + self.token
+            line = self.line
+            token = self.token
+            start = self.start
+            end = self.end
+            raise ParseException(message, line, token, start, end)
 
     def parentheses(self):
         tree = self.begin()
@@ -180,7 +198,12 @@ class Parser(object):
                 message = 'Expected closing parenthesis, but found ' + token
                 raise ParseException(message, self.line, token, start, end)
         else:
-            raise Exception  # TODO: Handle exception
+            message = 'Expected token after ' + self.token
+            line = self.line
+            token = self.token
+            start = self.start
+            end = self.end
+            raise ParseException(message, line, token, start, end)
 
     def absolute_value(self):
         tree = self.begin()
@@ -194,7 +217,12 @@ class Parser(object):
                     'but found ' + token
                 raise ParseException(message, self.line, token, start, end)
         else:
-            raise Exception  # TODO: Handle exception
+            message = 'Expected token after ' + self.token
+            line = self.line
+            token = self.token
+            start = self.start
+            end = self.end
+            raise ParseException(message, line, token, start, end)
 
     def function(self):
         token, _, _ = next(self.tokenizer)

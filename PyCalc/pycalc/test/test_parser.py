@@ -1,13 +1,19 @@
-from pycalc.lang.parser import Parser
+from pycalc.lang.parser import Parser, ParseException
 from pycalc.test import ConsoleTest
+from pycalc.lang.tokenizer import underline_token
 
 
 @ConsoleTest
 def test_parser(line):
     parser = Parser()
-    parser.parse(line)
-    tree = parser.tree
-    print(tree)
+    try:
+        parser.parse(line)
+    except ParseException as ex:
+        print('Error:', str(ex))
+        underline_token(line, ex.start, ex.end)
+    else:
+        tree = parser.tree
+        print(tree)
 
 if __name__ == '__main__':
     test_parser()
