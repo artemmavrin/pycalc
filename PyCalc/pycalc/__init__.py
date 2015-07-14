@@ -69,6 +69,9 @@ class Calculator(object):
                 print(name + (name_length - len(name)) * ' ' + ' ' + value)
 
     def show_help(self):
+        print('Enter arithmetic expressions or variable assignments '
+              'at the prompt.')
+        print()
         print('Special commands:')
         print(self.quit + ': exit the program')
         print(self.vars + ': view the stored variables')
