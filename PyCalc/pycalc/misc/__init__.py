@@ -2,7 +2,7 @@ from itertools import chain
 
 
 class Peeker(object):
-    '''Class for peeking at the next element of an iterable.
+    '''Class for peeking at the next element of an iterator.
 
     Example:
     >>> peeker = Peeker(range(2))
@@ -28,17 +28,17 @@ class Peeker(object):
     '''
 
     def __init__(self, iterable):
-        self.iterable = iter(iterable)
+        self.iterator = iter(iterable)
 
     def __iter__(self):
         return self
 
     def __next__(self):
-        return next(self.iterable)
+        return next(self.iterator)
 
     def peek(self):
         peek_value = next(self)
-        self.iterable = chain([peek_value], self.iterable)
+        self.iterator = chain([peek_value], self.iterator)
         return peek_value
 
     def has_next(self):
