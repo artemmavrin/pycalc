@@ -57,10 +57,10 @@ class Calculator(object):
             name = 'NAME'
             value = 'VALUE'
             name_length = max(len(name), max(len(name) for name in names))
-            print(name + (name_length - len(name)) * ' ' + '   ' + value)
+            print(name + (name_length - len(name)) * ' ' + ' ' + value)
             for name in names:
                 value = str(self.variables[name])
-                print(name + (name_length - len(name)) * ' ' + '   ' + value)
+                print(name + (name_length - len(name)) * ' ' + ' ' + value)
 
     def show_help(self):
         print('Special commands:')
