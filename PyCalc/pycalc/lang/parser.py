@@ -11,7 +11,7 @@ negative ::= exponent | '-' negative
 
 exponent ::= factorial | factorial '^' negative
 
-factorial ::= atom
+factorial ::= atom | atom '!'
 
 atom ::= function | variable | int_number | float_number | enclosure
 
@@ -122,8 +122,13 @@ class Parser(object):
         return left_tree
     
     def factorial(self):
-        #TODO: Implement grammar rule
-        return self.atom()
+        tree = self.atom()
+        if self.tokenizer.has_next():
+            token, _, _ = self.tokenizer.peek()
+            if token == '!':
+                next(self.tokenizer)
+                return UnaryFunction(token, tree)
+        return tree
     
     def atom(self):
         token, _, _ = self.tokenizer.peek()
