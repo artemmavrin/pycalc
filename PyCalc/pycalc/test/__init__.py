@@ -1,18 +1,15 @@
-def ConsoleTest(function):
-    def new_function():
-        prompt = '> '
-        quit_command = 'quit'
+class ConsoleTest(object):
+    def __init__(self, f):
+        self.f = f
+        self.prompt = '> '
+        self.quit = 'quit'
 
-        print("Type '" + quit_command + "' to exit the program.")
+    def __call__(self):
+        print("Type '" + self.quit + "' to exit the program.")
 
         while True:
-            line = input(prompt)
-            if line == quit_command:
+            line = input(self.prompt)
+            if line == self.quit:
                 break
             elif line:
-                try:
-                    function(line)
-                except Exception:
-                    print('There was an error.')
-
-    return new_function
+                self.f(line)
