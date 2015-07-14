@@ -36,11 +36,14 @@ from pycalc.lang.tree import BinaryOperation, UnaryFunction, Value, Variable
 
 class ParseException(Exception):
     def __init__(self, message, line, token, start, end):
-        super().__init__(message)
+        super.message = message
         super.line = line
         super.token = token
         super.start = start
         super.end = end
+
+    def __str__(self):
+        return self.message
 
 
 class Parser(object):
