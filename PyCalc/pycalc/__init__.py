@@ -10,12 +10,17 @@ constants = {'e': e, 'pi': pi}
 
 class Calculator(object):
 
-    def __init__(self, prompt='> ', quit_command='quit', vars_command='vars'):
+    def __init__(self,
+                 prompt='>>> ',
+                 quit_command='quit',
+                 vars_command='vars',
+                 help_command='help'):
         self.variables = {}
         self.parser = Parser()
         self.prompt = prompt
         self.quit = quit_command
         self.vars = vars_command
+        self.help = help_command
 
     def compute(self, line):
         line = line.strip()
@@ -38,7 +43,7 @@ class Calculator(object):
             expression = line
         self.parser.parse(expression)
         tree = self.parser.tree
-        if tree.set_variables(constants) or tree.set_variables(self.variables):
+        if tree.set_variables(self.variables) or tree.set_variables(constants):
             self.value = tree.evaluate()
             self.variables[name] = self.value
         else:
@@ -57,13 +62,24 @@ class Calculator(object):
                 value = str(self.variables[name])
                 print(name + (name_length - len(name)) * ' ' + '   ' + value)
 
+    def show_help(self):
+        print('Special commands:')
+        print(self.quit + ': exit the program')
+        print(self.vars + ': view the stored variables')
+        print(self.help + ': view this help message')
+
     def __call__(self):
+        print('PyCalc -- Python Calculator')
+        print("Type '" + self.help + "' for help.")
+
         while True:
             line = input(self.prompt)
             if line == self.quit:
                 break
-            if line == self.vars:
+            elif line == self.vars:
                 self.print_variables()
+            elif line == self.help:
+                self.show_help()
             elif line:
                 try:
                     self.compute(line)
