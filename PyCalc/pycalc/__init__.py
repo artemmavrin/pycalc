@@ -27,7 +27,7 @@ class Calculator(object):
                 name = lhs
                 expression = rhs
             else:
-                raise Exception('Invalid variable name:', lhs)
+                raise Exception('Invalid variable name: ' + lhs)
         else:
             name = default_variable
             expression = line
@@ -51,6 +51,6 @@ class Calculator(object):
                     print('Runtime error:', str(ex))
                     underline_token(line, ex.start, ex.end)
                 except Exception as ex:
-                    print(str(ex))
+                    print('Runtime error:', str(ex))
                 else:
                     print(self.value)
