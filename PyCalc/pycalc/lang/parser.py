@@ -107,7 +107,7 @@ class Parser(object):
             if self.token == '-':
                 next(self.tokenizer)
                 tree = self.negative()
-                return UnaryFunction(self.token, tree)
+                return UnaryFunction('-', tree)
             else:
                 return self.exponent()
             pass
