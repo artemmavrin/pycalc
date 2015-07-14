@@ -1,32 +1,20 @@
-'''
+'''Module containing the class for parsing expressions into ASTs
+
 The grammar for the PyCalc language is as follows:
 
 begin ::= add_or_sub
-
 add_or_sub ::= mul_or_div (('+'|'-') mul_or_div)*
-
 mul_or_div ::= negative (('*'|'/') negative)*
-
 negative ::= exponent | '-' negative
-
 exponent ::= factorial | factorial '^' negative
-
 factorial ::= atom ('!')*
-
 atom ::= function | variable | int_number | float_number | enclosure
-
 enclosure ::= parentheses | absolute_value
-
 parentheses ::= '(' begin ')'
-
 absolute_value ::= '|' begin '|'
-
 function ::= <valid function name> enclosure
-
 variable ::= <valid variable name>
-
 int_number ::= <int>
-
 float_number ::= <float>
 '''
 from pycalc.lang import is_float, is_function, is_int, is_variable
@@ -35,6 +23,7 @@ from pycalc.lang.tree import BinaryOperation, UnaryFunction, Value, Variable
 
 
 class ParseException(Exception):
+    '''Exceptions raised during parsing'''
     def __init__(self, message, line, token, start, end):
         self.message = message
         self.line = line
