@@ -48,10 +48,10 @@ class Parser(object):
         self.line = line
         self.tokenizer = Tokenizer(line)
         self.tree = self.begin()
-    
+
     def begin(self):
         return self.add_or_sub()
-    
+
     def add_or_sub(self):
         first_tree = self.mul_or_div()
         ops = []
@@ -74,7 +74,7 @@ class Parser(object):
             return result_tree
         else:
             return first_tree
-    
+
     def mul_or_div(self):
         first_tree = self.negative()
         ops = []
@@ -97,7 +97,7 @@ class Parser(object):
             return result_tree
         else:
             return first_tree
-    
+
     def negative(self):
         if self.tokenizer.has_next():
             token, _, _ = self.tokenizer.peek()
@@ -109,8 +109,8 @@ class Parser(object):
                 return self.exponent()
             pass
         else:
-            raise Exception #TODO: handle exception
-    
+            raise Exception  # TODO: handle exception
+
     def exponent(self):
         left_tree = self.factorial()
         if self.tokenizer.has_next():
@@ -120,7 +120,7 @@ class Parser(object):
                 right_tree = self.negative()
                 return BinaryOperation(token, left_tree, right_tree)
         return left_tree
-    
+
     def factorial(self):
         first_tree = self.atom()
         num_factorial = 0
@@ -141,7 +141,7 @@ class Parser(object):
             return result_tree
         else:
             return first_tree
-    
+
     def atom(self):
         token, _, _ = self.tokenizer.peek()
         if is_function(token):
@@ -154,7 +154,7 @@ class Parser(object):
             return self.float_number()
         else:
             return self.enclosure()
-    
+
     def enclosure(self):
         token, _, _ = self.tokenizer.peek()
         if token == '(':
@@ -164,8 +164,8 @@ class Parser(object):
             next(self.tokenizer)
             return self.absolute_value()
         else:
-            raise Exception #TODO: Handle exception
-    
+            raise Exception  # TODO: Handle exception
+
     def parentheses(self):
         tree = self.begin()
         if self.tokenizer.has_next():
@@ -177,8 +177,8 @@ class Parser(object):
                 message = 'Expected closing parenthesis, but found ' + token
                 raise ParseException(message, self.line, token, start, end)
         else:
-            raise Exception #TODO: Handle exception
-    
+            raise Exception  # TODO: Handle exception
+
     def absolute_value(self):
         tree = self.begin()
         if self.tokenizer.has_next():
@@ -187,24 +187,25 @@ class Parser(object):
                 next(self.tokenizer)
                 return UnaryFunction('abs', tree)
             else:
-                message = 'Expected closing absolute value delimiter, but found ' + token
+                message = 'Expected closing absolute value delimiter, '\
+                    'but found ' + token
                 raise ParseException(message, self.line, token, start, end)
         else:
-            raise Exception #TODO: Handle exception
-    
+            raise Exception  # TODO: Handle exception
+
     def function(self):
         token, _, _ = next(self.tokenizer)
         tree = self.enclosure()
         return UnaryFunction(token, tree)
-    
+
     def variable(self):
         token, _, _ = next(self.tokenizer)
         return Variable(token)
-    
+
     def int_number(self):
         token, _, _ = next(self.tokenizer)
         return Value(int(token))
-    
+
     def float_number(self):
         token, _, _ = next(self.tokenizer)
         return Value(float(token))

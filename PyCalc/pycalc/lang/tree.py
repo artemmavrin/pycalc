@@ -22,19 +22,20 @@ functions = {
              '!': factorial
              }
 
+
 class AST(metaclass=ABCMeta):
     @abstractmethod
     def evaluate(self):
         pass
-    
+
     @abstractmethod
     def set_variables(self, variables):
         pass
-    
+
     @abstractmethod
     def postfix(self):
         pass
-    
+
     def __repr__(self):
         return self.postfix()
 
@@ -44,17 +45,17 @@ class Branch(AST, metaclass=ABCMeta):
         self.f = f
         self.identifier = identifier
         self.args = args
-    
+
     def evaluate(self):
         return self.f(*(arg.evaluate() for arg in self.args))
-    
+
     def set_variables(self, variables):
         return all(arg.set_variables(variables) for arg in self.args)
-    
+
     def postfix(self):
         arguments = ' '.join(arg.postfix() for arg in self.args)
         return '(' + arguments + ') ' + self.identifier
-    
+
 
 class BinaryOperation(Branch):
     def __init__(self, op_symbol, left, right):
@@ -78,13 +79,13 @@ class Leaf(AST, metaclass=ABCMeta):
     def __init__(self, name, value):
         self.name = name
         self.value = value
-    
+
     def evaluate(self):
         return self.value
-    
+
     def set_variables(self, variables):
         return True
-    
+
     def postfix(self):
         return self.name
 
@@ -97,13 +98,13 @@ class Value(Leaf):
 class Variable(Leaf):
     def __init__(self, name):
         super().__init__(name, None)
-    
+
     def evaluate(self):
         if self.value is not None:
             return self.value
         else:
             raise Exception('The variable ' + self.name + ' has no value.')
-    
+
     def set_variables(self, variables):
         if self.name in variables:
             self.value = variables[self.name]

@@ -19,9 +19,11 @@ def generate_tokens(line, start=0):
             yield line[start:end], start, end
             yield from generate_tokens(line, end)
 
+
 def underline_token(line, start, end):
     print(line)
     print(start * ' ' + (end - start) * '^')
+
 
 class Tokenizer(Peeker):
     def __init__(self, line):
