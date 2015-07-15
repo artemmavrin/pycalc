@@ -2,6 +2,7 @@ from math import e, pi
 from pycalc.lang import is_variable
 from pycalc.lang.parser import Parser, ParseException
 from pycalc.lang.tokenizer import underline_token
+from pycalc.misc import print_table
 
 default_variable = 'ans'
 
@@ -50,14 +51,10 @@ class Calculator(object):
         if not self.variables:
             print('No variables to show.')
         else:
-            names = sorted(self.variables.keys())
-            name = 'NAME'
-            value = 'VALUE'
-            name_length = max(len(name), max(len(name) for name in names))
-            print(name + (name_length - len(name)) * ' ' + ' ' + value)
-            for name in names:
-                value = str(self.variables[name])
-                print(name + (name_length - len(name)) * ' ' + ' ' + value)
+            var_table = [['NAME', 'VALUE']]
+            for name in sorted(self.variables.keys()):
+                var_table.append([name, self.variables[name]])
+            print_table(var_table)
 
     def show_help(self):
         print('Enter arithmetic expressions or variable assignments '
