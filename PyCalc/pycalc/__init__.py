@@ -32,7 +32,8 @@ class Calculator(object):
     def compute(self, line):
         line = line.strip()
 
-        *names, expression = line.split('=')
+        *names, self.expression = line.split('=')
+        self.expression = self.expression.strip()
         names = list((name.strip() for name in names))
         if not names:
             names = [default_variable]
@@ -42,7 +43,10 @@ class Calculator(object):
             if not is_variable(name) or name in self.illegal_vars:
                 raise Exception('Illegal assignment: ' + name +
                                 ' is not a valid variable name')
-        self.parser.parse(expression)
+            if not name:
+                raise Exception('Illegal assignment: no variable or ' +
+                                'expression specified.')
+        self.parser.parse(self.expression)
         tree = self.parser.tree
         if tree.set_variables(self.variables) or tree.set_variables(constants):
             self.value = tree.evaluate()
@@ -131,7 +135,7 @@ class Calculator(object):
                     self.compute(line)
                 except ParseException as ex:
                     print('Runtime error:', str(ex))
-                    underline_token(line, ex.start, ex.end)
+                    underline_token(self.expression, ex.start, ex.end)
                 except Exception as ex:
                     print('Runtime error:', str(ex))
                 else:
