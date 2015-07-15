@@ -69,19 +69,32 @@ class Calculator(object):
         indent = '  '
         print('Enter arithmetic expressions or variable assignments '
               'at the prompt.')
+        print('Example:')
+        print(indent + self.prompt + '1 + 2')
+        print(indent + '3')
+        print(indent + self.prompt + 'a = pi')
+        print(indent + str(pi))
+        print(indent + self.prompt + 'a + e')
+        print(indent + str(pi + e))
+        print()
+        print('Multiple variables can be assigned the same value at once:')
+        print(indent + self.prompt + 'a = b = 10')
+        print(indent + '10')
+        print(indent + self.prompt + 'a * (b - 1)')
+        print(indent + '90')
         print()
         print('Special commands:')
-        print(self.quit)
-        print(indent + 'Exit the program.')
-        print(self.vars)
-        print(indent + 'View the stored variables.')
-        print(self.delete + ' (pattern)*')
-        print(indent + 'Delete all variables matching one of the given ' +
+        print(indent + self.quit)
+        print(2 * indent + 'Exit the program.')
+        print(indent + self.vars)
+        print(2 * indent + 'View the stored variables.')
+        print(indent + self.delete + ' (pattern)*')
+        print(2 * indent + 'Delete all variables matching one of the given ' +
               'patterns.')
-        print(indent + 'If no patterns are specified, all variables are ' +
+        print(2 * indent + 'If no patterns are specified, all variables are ' +
               'deleted.')
-        print(self.help)
-        print(indent + 'View this help message')
+        print(indent + self.help)
+        print(2 * indent + 'View this help message')
 
     def delete_variables(self, line):
         if self.variables:
