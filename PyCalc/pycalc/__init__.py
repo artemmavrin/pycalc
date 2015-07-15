@@ -51,9 +51,10 @@ class Calculator(object):
         if not self.variables:
             print('No variables to show.')
         else:
-            var_table = [['name', 'value']]
+            var_table = [['name', 'value', 'type']]
             for name in sorted(self.variables.keys(), key=lambda s: s.lower()):
-                var_table.append([name, self.variables[name]])
+                value = self.variables[name]
+                var_table.append([name, value, type(value).__name__])
             print_table(var_table)
 
     def show_help(self):
