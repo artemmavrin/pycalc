@@ -94,7 +94,7 @@ class Calculator(object):
                 deleted = []
                 failed_patterns = []
                 for pattern in tokens[1:]:
-                    regex = compile(pattern)
+                    regex = compile('^' + pattern + '$')
                     match_found = False
                     for name in names:
                         if regex.match(name) and name in self.variables:
