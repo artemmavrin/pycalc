@@ -6,8 +6,6 @@ from pycalc.lang.parser import Parser, ParseException
 from pycalc.lang.tokenizer import underline_token
 from pycalc.misc import print_iterable, print_table
 
-default_variable = 'ans'
-
 constants = {'e': e, 'pi': pi}
 
 
@@ -26,27 +24,12 @@ class Calculator(object):
         self.vars = vars_command
         self.help = help_command
         self.delete = delete_command
-        self.illegal_vars = [self.quit, self.vars, self.help, self.delete]
-        self.parser = Parser(self.illegal_vars)
+        illegal_vars = [self.quit, self.vars, self.help, self.delete]
+        self.parser = Parser(illegal_vars=illegal_vars)
 
     def compute(self, line):
-        line = line.strip()
-
-        *names, self.expression = line.split('=')
-        self.expression = self.expression.strip()
-        names = list((name.strip() for name in names))
-        if not names:
-            names = [default_variable]
-
-        # check that all variable names are valid
-        for name in names:
-            if not is_variable(name) or name in self.illegal_vars:
-                raise Exception('Illegal assignment: ' + name +
-                                ' is not a valid variable name')
-            if not name:
-                raise Exception('Illegal assignment: no variable or ' +
-                                'expression specified.')
-        self.parser.parse(self.expression)
+        self.parser.parse(line)
+        names = self.parser.names
         tree = self.parser.tree
         if tree.set_variables(self.variables) or tree.set_variables(constants):
             self.value = tree.evaluate()

@@ -26,7 +26,7 @@ class ParseException(Exception):
     '''Exceptions raised during parsing'''
     def __init__(self, message, line, token, start, end):
         self.message = message
-        self.line = line
+        self.expression = line
         self.token = token
         self.start = start
         self.end = end
@@ -36,12 +36,29 @@ class ParseException(Exception):
 
 
 class Parser(object):
-    def __init__(self, illegal_vars=[]):
+    def __init__(self, illegal_vars=[], default_variable='ans'):
         self.illegal_vars = illegal_vars
+        self.default_variable = default_variable
 
     def parse(self, line):
-        self.line = line
-        self.tokenizer = Tokenizer(line)
+        line = line.strip()
+        *self.names, self.expression = line.split('=')
+        self.expression = self.expression.strip()
+        self.names = list((name.strip() for name in self.names))
+        if not self.names:
+            self.names = [self.default_variable]
+
+        # Check that all variable names are valid
+        for name in self.names:
+            if not is_variable(name) or name in self.illegal_vars:
+                raise Exception('Illegal assignment: ' + name +
+                                ' is not a valid variable name')
+            if not name:
+                raise Exception('Illegal assignment: no variable or ' +
+                                'expression specified.')
+
+        # Parse expression according to grammar rules
+        self.tokenizer = Tokenizer(self.expression)
         self.tree = self.begin()
 
     def begin(self):
@@ -105,7 +122,7 @@ class Parser(object):
             pass
         else:
             message = 'Expected token after ' + self.token
-            line = self.line
+            line = self.expression
             token = self.token
             start = self.start
             end = self.end
@@ -157,7 +174,7 @@ class Parser(object):
                 return self.enclosure()
         else:
             message = 'Expected token after ' + self.token
-            line = self.line
+            line = self.expression
             token = self.token
             start = self.start
             end = self.end
@@ -173,7 +190,7 @@ class Parser(object):
             return self.absolute_value()
         else:
             message = 'Expected token after ' + self.token
-            line = self.line
+            line = self.expression
             token = self.token
             start = self.start
             end = self.end
@@ -187,11 +204,11 @@ class Parser(object):
                 next(self.tokenizer)
                 return tree
             else:
-                message = 'Expected closing parenthesis, but found ' + token
-                raise ParseException(message, self.line, token, start, end)
+                error = 'Expected closing parenthesis, but found ' + token
+                raise ParseException(error, self.expression, token, start, end)
         else:
             message = 'Expected closing parenthesis after ' + self.token
-            line = self.line
+            line = self.expression
             token = self.token
             start = self.start
             end = self.end
@@ -205,13 +222,13 @@ class Parser(object):
                 next(self.tokenizer)
                 return UnaryFunction('abs', tree)
             else:
-                message = 'Expected closing absolute value delimiter, '\
+                error = 'Expected closing absolute value delimiter, '\
                     'but found ' + token
-                raise ParseException(message, self.line, token, start, end)
+                raise ParseException(error, self.expression, token, start, end)
         else:
             message = 'Expected closing absolute value delimiter '\
                 'after ' + self.token
-            line = self.line
+            line = self.expression
             token = self.token
             start = self.start
             end = self.end
@@ -226,7 +243,7 @@ class Parser(object):
         token, start, end = next(self.tokenizer)
         if token in self.illegal_vars:
             message = 'Illegal variable name: ' + token
-            raise ParseException(message, self.line, token, start, end)
+            raise ParseException(message, self.expression, token, start, end)
         return Variable(token)
 
     def int_number(self):
