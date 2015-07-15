@@ -107,12 +107,12 @@ class Calculator(object):
                     print('The following variables were deleted:')
                     print_iterable(deleted)
                     print()
+                    if failed_patterns:
+                        print('No variables matched the following patterns:')
+                        print_iterable(failed_patterns)
+                        print()
                 else:
                     print('No variables matched the given patterns.')
-                if failed_patterns:
-                    print('No variables matched the following patterns:')
-                    print_iterable(failed_patterns)
-                    print()
         else:
             print('There are no variables to delete.')
 
