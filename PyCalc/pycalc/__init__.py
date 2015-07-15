@@ -1,4 +1,6 @@
 from math import e, pi
+from re import compile
+
 from pycalc.lang import is_variable
 from pycalc.lang.parser import Parser, ParseException
 from pycalc.lang.tokenizer import underline_token
@@ -16,13 +18,15 @@ class Calculator(object):
                  quit_command='quit',
                  vars_command='vars',
                  help_command='help',
+                 delete_command='del'
                  ):
         self.variables = {}
         self.prompt = prompt
         self.quit = quit_command
         self.vars = vars_command
         self.help = help_command
-        self.illegal_vars = [self.quit, self.vars, self.help]
+        self.delete = delete_command
+        self.illegal_vars = [self.quit, self.vars, self.help, self.delete]
         self.parser = Parser(self.illegal_vars)
 
     def compute(self, line):
@@ -66,6 +70,30 @@ class Calculator(object):
         print(self.vars + ': view the stored variables')
         print(self.help + ': view this help message')
 
+    def delete_variables(self, line):
+        if self.variables:
+            tokens = line.split()
+            if len(tokens) == 1:
+                self.variables.clear()
+                print('Deleted all variables.')
+            else:
+                names = sorted(self.variables.keys(), key=lambda s: s.lower())
+                deleted = []
+                for pattern in tokens[1:]:
+                    regex = compile(pattern)
+                    for name in names:
+                        if regex.match(name) and name in self.variables:
+                            del self.variables[name]
+                            deleted.append(name)
+                if deleted:
+                    print('The following variables were deleted:')
+                    for name in deleted:
+                        print(name)
+                else:
+                    print('No variables matched the given patterns.')
+        else:
+            print('There are no variables to delete.')
+
     def __call__(self):
         print('PyCalc -- Python Calculator')
         print("Type '" + self.help + "' for help.")
@@ -78,6 +106,8 @@ class Calculator(object):
                 self.print_variables()
             elif line == self.help:
                 self.show_help()
+            elif line.startswith(self.delete):
+                self.delete_variables(line)
             elif line:
                 try:
                     self.compute(line)
