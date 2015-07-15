@@ -26,32 +26,23 @@ class Calculator(object):
 
     def compute(self, line):
         line = line.strip()
-        name = ''
-        expression = ''
 
-        lhs_rhs = line.split('=')  # left-hand-side/right-hand-side
-        if len(lhs_rhs) > 2:
-            raise Exception('Multiple assignments are not allowed')
-        elif len(lhs_rhs) == 2:
-            lhs = lhs_rhs[0].strip()  # left-hand-side of line
-            rhs = lhs_rhs[1].strip()  # right-hand-side of line
-            if is_variable(lhs):
-                if lhs in self.illegal_vars:
-                    message = 'Illegal assignment: ' + lhs +\
-                        ' is not a valid variable name.'
-                    raise Exception(message)
-                name = lhs
-                expression = rhs
-            else:
-                raise Exception('Invalid variable name: ' + lhs)
-        else:
-            name = default_variable
-            expression = line
+        *names, expression = line.split('=')
+        names = list((name.strip() for name in names))
+        if not names:
+            names = [default_variable]
+
+        # check that all variable names are valid
+        for name in names:
+            if not is_variable(name) or name in self.illegal_vars:
+                raise Exception('Illegal assignment: ' + name +
+                                ' is not a valid variable name')
         self.parser.parse(expression)
         tree = self.parser.tree
         if tree.set_variables(self.variables) or tree.set_variables(constants):
             self.value = tree.evaluate()
-            self.variables[name] = self.value
+            for name in names:
+                self.variables[name] = self.value
         else:
             raise Exception('Encountered unknown variable.')
 
