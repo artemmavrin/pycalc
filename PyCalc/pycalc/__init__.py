@@ -14,7 +14,7 @@ constants = {'e': e, 'pi': pi}
 class Calculator(object):
 
     def __init__(self,
-                 prompt='>>> ',
+                 prompt='> ',
                  quit_command='quit',
                  vars_command='vars',
                  help_command='help',
