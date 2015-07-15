@@ -62,13 +62,22 @@ class Calculator(object):
             print_table(var_table)
 
     def show_help(self):
+        indent = '  '
         print('Enter arithmetic expressions or variable assignments '
               'at the prompt.')
         print()
         print('Special commands:')
-        print(self.quit + ': exit the program')
-        print(self.vars + ': view the stored variables')
-        print(self.help + ': view this help message')
+        print(self.quit)
+        print(indent + 'Exit the program.')
+        print(self.vars)
+        print(indent + 'View the stored variables.')
+        print(self.delete + ' (pattern)*')
+        print(indent + 'Delete all variables matching one of the given ' +
+              'patterns.')
+        print(indent + 'If no patterns are specified, all variables are ' +
+              'deleted.')
+        print(self.help)
+        print(indent + 'View this help message')
 
     def delete_variables(self, line):
         if self.variables:
