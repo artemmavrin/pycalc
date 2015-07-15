@@ -18,7 +18,7 @@ class Calculator(object):
                  quit_command='quit',
                  vars_command='vars',
                  help_command='help',
-                 delete_command='del'
+                 delete_command='del',
                  ):
         self.variables = {}
         self.prompt = prompt
