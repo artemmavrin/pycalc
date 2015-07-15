@@ -52,7 +52,7 @@ class Calculator(object):
             print('No variables to show.')
         else:
             var_table = [['NAME', 'VALUE']]
-            for name in sorted(self.variables.keys()):
+            for name in sorted(self.variables.keys(), key=lambda s: s.lower()):
                 var_table.append([name, self.variables[name]])
             print_table(var_table)
 
