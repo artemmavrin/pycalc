@@ -4,7 +4,7 @@ from re import compile
 from pycalc.lang import is_variable
 from pycalc.lang.parser import Parser, ParseException
 from pycalc.lang.tokenizer import underline_token
-from pycalc.misc import print_table
+from pycalc.misc import print_iterable, print_table
 
 default_variable = 'ans'
 
@@ -96,8 +96,8 @@ class Calculator(object):
                             deleted.append(name)
                 if deleted:
                     print('The following variables were deleted:')
-                    for name in deleted:
-                        print(name)
+                    print_iterable(deleted)
+                    print()
                 else:
                     print('No variables matched the given patterns.')
         else:

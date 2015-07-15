@@ -63,3 +63,14 @@ def print_table(table, sep=' '):
         format_string = sep.join('{:<' + str(l) + '}' for l in max_len)
         for row in table:
             print(format_string.format(*row))
+
+
+def print_iterable(iterable, max_length=80, sep=' '):
+    spaces_used = 0
+    for x in iter(iterable):
+        current_string = str(x) + sep
+        if spaces_used + len(current_string) > max_length:
+            print()
+            spaces_used = 0
+        print(current_string, end="")
+        spaces_used += len(current_string)
