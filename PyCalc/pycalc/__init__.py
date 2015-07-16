@@ -18,6 +18,7 @@ class Calculator(object):
                  vars_command='vars',
                  help_command='help',
                  delete_command='del',
+                 comment='#',
                  ):
         self.variables = {}
         self.prompt = prompt
@@ -27,6 +28,7 @@ class Calculator(object):
         self.delete = delete_command
         illegal_vars = [self.quit, self.vars, self.help, self.delete]
         self.parser = Parser(illegal_vars=illegal_vars)
+        self.comment = comment
 
     def compute(self, line):
         self.parser.parse(line)
@@ -118,6 +120,8 @@ class Calculator(object):
 
         while True:
             line = input(self.prompt)
+            # remove comments
+            line = line.split(self.comment)[0].strip()
             if line == self.quit:
                 break
             elif line == self.vars:
