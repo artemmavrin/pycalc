@@ -96,6 +96,7 @@ class Calculator(object):
                 names = sorted(self.variables.keys(), key=lambda s: s.lower())
                 deleted = []
                 failed_patterns = []
+                patterns = tokens[1:]
                 for pattern in tokens[1:]:
                     regex = compile('^' + pattern + '$')
                     match_found = False
@@ -110,11 +111,13 @@ class Calculator(object):
                     print_iterable(chain(['Delteted:'], deleted))
                     print()
                     if failed_patterns:
-                        print('No variables matched the following patterns:')
+                        print('No variables matched the following pattern' +
+                              int(bool(failed_patterns[1:])) * 's' + ':')
                         print_iterable(failed_patterns)
                         print()
                 else:
-                    print('No variables matched the given patterns.')
+                    print('No variables matched the given pattern' +
+                          int(bool(patterns[1:])) * 's' + '.')
         else:
             print('There are no variables to delete.')
 
