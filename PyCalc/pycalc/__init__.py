@@ -5,6 +5,7 @@ from pycalc.lang import is_variable
 from pycalc.lang.parser import Parser, ParseException
 from pycalc.lang.tokenizer import underline_token
 from pycalc.misc import print_iterable, print_table
+from itertools import chain
 
 constants = {'e': e, 'pi': pi}
 
@@ -100,8 +101,7 @@ class Calculator(object):
                     if not match_found:
                         failed_patterns.append(pattern)
                 if deleted:
-                    print('The following variables were deleted:')
-                    print_iterable(deleted)
+                    print_iterable(chain(['Delteted:'], deleted))
                     print()
                     if failed_patterns:
                         print('No variables matched the following patterns:')
