@@ -131,7 +131,7 @@ class Calculator(object):
                     self.compute(line)
                 except ParseException as ex:
                     print('Runtime error:', str(ex))
-                    underline_token(self.expression, ex.start, ex.end)
+                    underline_token(ex.expression, ex.start, ex.end)
                 except Exception as ex:
                     print('Runtime error:', str(ex))
                 else:

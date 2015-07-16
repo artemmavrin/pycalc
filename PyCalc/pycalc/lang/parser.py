@@ -24,9 +24,9 @@ from pycalc.lang.tree import BinaryOperation, UnaryFunction, Value, Variable
 
 class ParseException(Exception):
     '''Exceptions raised during parsing'''
-    def __init__(self, message, line, token, start, end):
+    def __init__(self, message, expression, token, start, end):
         self.message = message
-        self.expression = line
+        self.expression = expression
         self.token = token
         self.start = start
         self.end = end
@@ -122,11 +122,11 @@ class Parser(object):
             pass
         else:
             message = 'Expected token after ' + self.token
-            line = self.expression
+            expression = self.expression
             token = self.token
             start = self.start
             end = self.end
-            raise ParseException(message, line, token, start, end)
+            raise ParseException(message, expression, token, start, end)
 
     def exponent(self):
         left_tree = self.factorial()
@@ -190,11 +190,11 @@ class Parser(object):
             return self.absolute_value()
         else:
             message = 'Expected token after ' + self.token
-            line = self.expression
+            expression = self.expression
             token = self.token
             start = self.start
             end = self.end
-            raise ParseException(message, line, token, start, end)
+            raise ParseException(message, expression, token, start, end)
 
     def parentheses(self):
         tree = self.begin()
@@ -208,11 +208,11 @@ class Parser(object):
                 raise ParseException(error, self.expression, token, start, end)
         else:
             message = 'Expected closing parenthesis after ' + self.token
-            line = self.expression
+            expression = self.expression
             token = self.token
             start = self.start
             end = self.end
-            raise ParseException(message, line, token, start, end)
+            raise ParseException(message, expression, token, start, end)
 
     def absolute_value(self):
         tree = self.begin()
@@ -228,11 +228,11 @@ class Parser(object):
         else:
             message = 'Expected closing absolute value delimiter '\
                 'after ' + self.token
-            line = self.expression
+            expression = self.expression
             token = self.token
             start = self.start
             end = self.end
-            raise ParseException(message, line, token, start, end)
+            raise ParseException(message, expression, token, start, end)
 
     def function(self):
         token, _, _ = next(self.tokenizer)
