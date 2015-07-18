@@ -91,3 +91,8 @@ def print_iterable(iterable, max_length=80, sep=' ', end='\n'):
                 print(current, end='')
                 spaces_used += len(current)
                 break
+
+
+def underline_substring(string, start, end, underline_char='^'):
+    print(string)
+    print(start * ' ' + (end - start) * underline_char)

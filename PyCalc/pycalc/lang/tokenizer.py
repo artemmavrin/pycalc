@@ -20,11 +20,6 @@ def generate_tokens(line, start=0):
             yield from generate_tokens(line, end)
 
 
-def underline_token(line, start, end):
-    print(line)
-    print(start * ' ' + (end - start) * '^')
-
-
 class Tokenizer(Peeker):
     def __init__(self, line):
         super().__init__(generate_tokens(line))

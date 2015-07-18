@@ -3,8 +3,7 @@ from re import compile
 
 from pycalc.lang import is_variable
 from pycalc.lang.parser import Parser, ParseException
-from pycalc.lang.tokenizer import underline_token
-from pycalc.misc import print_iterable, print_table
+from pycalc.misc import print_iterable, print_table, underline_substring
 from itertools import chain
 
 constants = {'e': e, 'pi': pi}
@@ -140,7 +139,7 @@ class Calculator(object):
                     self.compute(line)
                 except ParseException as ex:
                     print('Runtime error:', str(ex))
-                    underline_token(ex.expression, ex.start, ex.end)
+                    underline_substring(ex.expression, ex.start, ex.end)
                 except Exception as ex:
                     print('Runtime error:', str(ex))
                 else:
