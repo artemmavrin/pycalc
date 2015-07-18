@@ -1,4 +1,4 @@
-from pycalc import Calculator
+from pycalc import PyCalc
 
 if __name__ == '__main__':
-    Calculator()()
+    PyCalc()()

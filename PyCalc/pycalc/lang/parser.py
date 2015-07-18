@@ -44,18 +44,19 @@ class Parser(object):
         line = line.strip()
         *self.names, self.expression = line.split('=')
         self.expression = self.expression.strip()
-        self.names = list((name.strip() for name in self.names))
+        # remove whitespace, remove duplicates, and sort
+        self.names = sorted(set((name.strip() for name in self.names)))
         # if no names are specified, use the default variable name
         self.names = [self.default_variable] if not self.names else self.names
 
         # Check that all variable names are valid
         for name in self.names:
-            if not is_variable(name) or name in self.illegal_vars:
-                raise Exception('Illegal assignment: ' + name +
-                                ' is not a valid variable name')
             if not name:
                 raise Exception('Illegal assignment: no variable or ' +
                                 'expression specified.')
+            if not is_variable(name) or name in self.illegal_vars:
+                raise Exception('Illegal assignment: ' + name +
+                                ' is not a valid variable name')
 
         # Parse expression according to grammar rules
         self.tokenizer = Tokenizer(self.expression)

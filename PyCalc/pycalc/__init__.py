@@ -9,7 +9,7 @@ from itertools import chain
 constants = {'e': e, 'pi': pi}
 
 
-class Calculator(object):
+class PyCalc(object):
 
     def __init__(self,
                  prompt='>>> ',
@@ -55,22 +55,21 @@ class Calculator(object):
         print('Enter arithmetic expressions or variable assignments '
               'at the prompt.')
         print('Example:')
-        print(indent + self.prompt + '1 + 2')
-        print(indent + '3')
-        print(indent + self.prompt + 'a = pi')
-        print(indent + str(pi))
-        print(indent + self.prompt + 'a + e')
-        print(indent + str(pi + e))
-        print()
-        print('Multiple variables can be assigned the same value at once:')
-        print(indent + self.prompt + 'a = b = 10')
-        print(indent + '10')
-        print(indent + self.prompt + 'a * (b - 1)')
-        print(indent + '90')
-        print()
-        print('Characters beginning with ' + self.comment + ' are ignored:')
-        print(indent + self.prompt + '|1-2| # this is a comment')
-        print(indent + '1')
+        print(self.prompt + '1 + 2')
+        print('ans =')
+        print('    3')
+        print(self.prompt + 'a = pi')
+        print('a =')
+        print('    ' + str(pi))
+        print(self.prompt + 'a + e')
+        print('ans =')
+        print('    ' + str(pi + e))
+        print(self.prompt + 'b = c = 10')
+        print('b, c =')
+        print('    10')
+        print(self.prompt + 'log|1-2| # this is a comment')
+        print('ans =')
+        print('    0.0')
         print()
         print('Special commands:')
         print(indent + self.quit)
@@ -119,7 +118,7 @@ class Calculator(object):
             print('There are no variables to delete.')
 
     def __call__(self):
-        print('PyCalc -- Python Calculator')
+        print('PyCalc -- Python PyCalc')
         print("Type '" + self.help + "' for help.")
 
         while True:
