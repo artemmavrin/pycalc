@@ -93,24 +93,15 @@ class PyCalc(object):
             else:
                 names = sorted(self.variables.keys(), key=lambda s: s.lower())
                 deleted = []
-                failed_patterns = []
                 patterns = tokens[1:]
                 for pattern in tokens[1:]:
                     regex = compile('^' + pattern + '$')
-                    match_found = False
                     for name in names:
                         if regex.match(name) and name in self.variables:
-                            match_found = True
                             del self.variables[name]
                             deleted.append(name)
-                    if not match_found:
-                        failed_patterns.append(pattern)
                 if deleted:
                     print_iterable(chain(['Delteted:'], deleted))
-                    if failed_patterns:
-                        print('No variables matched the following pattern' +
-                              int(bool(failed_patterns[1:])) * 's' + ':')
-                        print_iterable(failed_patterns)
                 else:
                     print('No variables matched the given pattern' +
                           int(bool(patterns[1:])) * 's' + '.')
