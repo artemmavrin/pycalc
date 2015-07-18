@@ -65,12 +65,29 @@ def print_table(table, sep=' '):
             print(format_string.format(*row))
 
 
-def print_iterable(iterable, max_length=80, sep=' '):
+def print_iterable(iterable, max_length=80, sep=' ', end='\n'):
     spaces_used = 0
-    for x in iter(iterable):
-        current_string = str(x) + sep
-        if spaces_used + len(current_string) > max_length:
-            print()
-            spaces_used = 0
-        print(current_string, end="")
-        spaces_used += len(current_string)
+    xs = iter(iterable)
+    try:
+        x = next(xs)
+    except StopIteration:
+        pass
+    else:
+        while True:
+            try:
+                y = next(xs)
+                current = str(x) + sep
+                if spaces_used + len(current) > max_length:
+                    print()
+                    spaces_used = 0
+                print(current, end='')
+                spaces_used += len(current)
+                x = y
+            except StopIteration:
+                current = str(x) + end
+                if spaces_used + len(current) > max_length:
+                    print()
+                    spaces_used = 0
+                print(current, end='')
+                spaces_used += len(current)
+                break

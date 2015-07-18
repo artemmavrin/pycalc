@@ -32,11 +32,11 @@ class Calculator(object):
 
     def compute(self, line):
         self.parser.parse(line)
-        names = self.parser.names
+        self.names = self.parser.names
         tree = self.parser.tree
         if tree.set_variables(self.variables) or tree.set_variables(constants):
             self.value = tree.evaluate()
-            for name in names:
+            for name in self.names:
                 self.variables[name] = self.value
         else:
             raise Exception('Encountered unknown variable.')
@@ -146,4 +146,5 @@ class Calculator(object):
                 except Exception as ex:
                     print('Runtime error:', str(ex))
                 else:
-                    print(self.value)
+                    print_iterable(self.names, sep=', ', end=' =\n')
+                    print('    ' + str(self.value))

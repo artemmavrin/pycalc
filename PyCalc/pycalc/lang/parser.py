@@ -36,7 +36,7 @@ class ParseException(Exception):
 
 
 class Parser(object):
-    def __init__(self, illegal_vars=[], default_variable='_'):
+    def __init__(self, illegal_vars=[], default_variable='ans'):
         self.illegal_vars = illegal_vars
         self.default_variable = default_variable
 
