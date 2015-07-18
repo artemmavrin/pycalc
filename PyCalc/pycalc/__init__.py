@@ -1,10 +1,11 @@
+from itertools import chain
 from math import e, pi
 from re import compile
 
 from pycalc.lang import is_variable
 from pycalc.lang.parser import Parser, ParseException
 from pycalc.misc import print_iterable, print_table, underline_substring
-from itertools import chain
+
 
 constants = {'e': e, 'pi': pi}
 
