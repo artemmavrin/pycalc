@@ -45,8 +45,8 @@ class Parser(object):
         *self.names, self.expression = line.split('=')
         self.expression = self.expression.strip()
         self.names = list((name.strip() for name in self.names))
-        if not self.names:
-            self.names = [self.default_variable]
+        # if no names are specified, use the default variable name
+        self.names = [self.default_variable] if not self.names else self.names
 
         # Check that all variable names are valid
         for name in self.names:
