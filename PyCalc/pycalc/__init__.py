@@ -109,12 +109,10 @@ class Calculator(object):
                         failed_patterns.append(pattern)
                 if deleted:
                     print_iterable(chain(['Delteted:'], deleted))
-                    print()
                     if failed_patterns:
                         print('No variables matched the following pattern' +
                               int(bool(failed_patterns[1:])) * 's' + ':')
                         print_iterable(failed_patterns)
-                        print()
                 else:
                     print('No variables matched the given pattern' +
                           int(bool(patterns[1:])) * 's' + '.')
