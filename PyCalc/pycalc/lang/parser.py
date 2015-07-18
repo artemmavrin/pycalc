@@ -67,7 +67,6 @@ class Parser(object):
             token, start, end = next(self.tokenizer)
             message = 'Dangling tokens starting with ' + token
             raise ParseException(message, self.expression, token, start, end)
-            pass
 
     def begin(self):
         return self.add_or_sub()
