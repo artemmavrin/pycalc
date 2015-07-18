@@ -1,5 +1,5 @@
 from pycalc.lang.parser import Parser, ParseException
-from pycalc.lang.tokenizer import underline_token
+from pycalc.misc import underline_substring
 from pycalc.test import ConsoleTest
 
 
@@ -10,7 +10,7 @@ def test_parser(line):
         parser.parse(line)
     except ParseException as ex:
         print('Error:', str(ex))
-        underline_token(line, ex.start, ex.end)
+        underline_substring(line, ex.start, ex.end)
     else:
         tree = parser.tree
         print(tree)
