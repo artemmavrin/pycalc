@@ -55,22 +55,7 @@ class PyCalc(object):
         indent = '  '
         print('Enter arithmetic expressions or variable assignments '
               'at the prompt.')
-        print('Example:')
-        print(self.prompt + '1 + 2')
-        print('ans =')
-        print('    3')
-        print(self.prompt + 'a = pi')
-        print('a =')
-        print('    ' + str(pi))
-        print(self.prompt + 'a + e')
-        print('ans =')
-        print('    ' + str(pi + e))
-        print(self.prompt + 'b = c = 10')
-        print('b, c =')
-        print('    10')
-        print(self.prompt + 'log|1-2| # this is a comment')
-        print('ans =')
-        print('    0.0')
+        
         print()
         print('Special commands:')
         print(indent + self.quit)
