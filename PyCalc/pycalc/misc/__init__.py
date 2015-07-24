@@ -24,9 +24,7 @@ class Peeker(object):
     Traceback (most recent call last):
     ...
     StopIteration
-
     '''
-
     def __init__(self, iterable):
         self.iterator = iter(iterable)
 

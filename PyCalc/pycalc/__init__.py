@@ -55,7 +55,6 @@ class PyCalc(object):
         indent = '  '
         print('Enter arithmetic expressions or variable assignments '
               'at the prompt.')
-        
         print()
         print('Special commands:')
         print(indent + self.quit)
