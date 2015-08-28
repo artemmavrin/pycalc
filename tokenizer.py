@@ -1,5 +1,5 @@
-from pycalc.lang import reserved_chars
-from pycalc.misc import Peeker
+from lang import reserved_chars
+from misc import Peeker
 
 
 def generate_tokens(line, start=0):
