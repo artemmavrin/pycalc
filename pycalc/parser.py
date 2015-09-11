@@ -264,7 +264,7 @@ class Parser(object):
 
     def absolute_value(self):
         '''Rule:
-        absolute_value ::= "|" expression "|"''''
+        absolute_value ::= "|" expression "|"'''
         tree = self.expression()
         if self.tokenizer.has_next():
             token, start, end = self.tokenizer.peek()
