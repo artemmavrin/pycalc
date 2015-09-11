@@ -32,4 +32,6 @@ of the variables you want to delete:
 
 ![Screenshot](images/screenshot05.png)
 
-For more help, type `help` at the prompt.
+For more help, type `help` at the prompt:
+
+![Screenshot](images/screenshot06.png)
