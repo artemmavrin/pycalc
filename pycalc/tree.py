@@ -103,7 +103,8 @@ class Variable(Leaf):
         if self.value is not None:
             return self.value
         else:
-            raise Exception('The variable ' + self.name + ' has no value.')
+            message = 'The variable ' + self.name + ' has no value.'
+            raise UnboundLocalError(message)
 
     def set_variables(self, variables):
         if self.name in variables:
