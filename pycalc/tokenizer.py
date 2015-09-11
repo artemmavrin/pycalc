@@ -1,5 +1,6 @@
 from itertools import chain
-from lang import reserved_chars
+
+from pycalc.lang import reserved_chars
 
 
 class Peeker(object):

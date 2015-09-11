@@ -17,9 +17,9 @@ variable ::= <valid variable name>
 int_number ::= <int>
 float_number ::= <float>
 '''
-from lang import is_float, is_function, is_int, is_variable
-from tokenizer import Tokenizer
-from tree import BinaryOperation, UnaryFunction, Value, Variable
+from pycalc.lang import is_float, is_function, is_int, is_variable
+from pycalc.tokenizer import Tokenizer
+from pycalc.tree import BinaryOperation, UnaryFunction, Value, Variable
 
 
 class ParseException(Exception):
