@@ -1,6 +1,6 @@
-'''Module containing the class for parsing expressions into ASTs
+'''Module containing the Parser class for parsing expressions into ASTs.
 
-The grammar for the PyCalc language is as follows:
+The context-free grammar for the PyCalc language is as follows:
 
 begin ::= add_or_sub
 add_or_sub ::= mul_or_div (('+'|'-') mul_or_div)*
@@ -36,11 +36,14 @@ class ParseException(Exception):
 
 
 class Parser(object):
+    '''Class for parsing expressions into ASTs.'''
     def __init__(self, illegal_vars, default_variable):
         self.illegal_vars = illegal_vars
         self.default_variable = default_variable
 
     def parse(self, line):
+        '''Begin parsing the given line.'''
+        # Turn the line into variable names and an arithemtic expression.
         line = line.strip()
         *self.names, self.expression = line.split('=')
         self.expression = self.expression.strip()
@@ -68,10 +71,16 @@ class Parser(object):
             message = 'Dangling tokens starting with ' + token
             raise ParseException(message, self.expression, token, start, end)
 
+    # Everything below corresponds to the grammar rules described at the top.
+
     def begin(self):
+        '''Rule:
+        begin ::= add_or_sub'''
         return self.add_or_sub()
 
     def add_or_sub(self):
+        '''Rule:
+        add_or_sub ::= mul_or_div (("+"|"-") mul_or_div)*'''
         first_tree = self.mul_or_div()
         ops = []
         trees = []
@@ -95,6 +104,8 @@ class Parser(object):
             return first_tree
 
     def mul_or_div(self):
+        '''Rule:
+        mul_or_div ::= negative (("*"|"/") negative)*'''
         first_tree = self.negative()
         ops = []
         trees = []
@@ -118,6 +129,8 @@ class Parser(object):
             return first_tree
 
     def negative(self):
+        '''Rule:
+        negative ::= exponent | "-" negative'''
         if self.tokenizer.has_next():
             self.token, self.start, self.end = self.tokenizer.peek()
             if self.token == '-':
@@ -136,6 +149,8 @@ class Parser(object):
             raise ParseException(message, expression, token, start, end)
 
     def exponent(self):
+        '''Rule:
+        exponent ::= factorial | factorial "^" negative'''
         left_tree = self.factorial()
         if self.tokenizer.has_next():
             self.token, self.start, self.end = self.tokenizer.peek()
@@ -146,6 +161,8 @@ class Parser(object):
         return left_tree
 
     def factorial(self):
+        '''Rule:
+        factorial ::= atom ("!")*'''
         first_tree = self.atom()
         num_factorial = 0
         while True:
@@ -167,6 +184,8 @@ class Parser(object):
             return first_tree
 
     def atom(self):
+        '''Rule:
+        atom ::= function | variable | int_number | float_number | enclosure'''
         if self.tokenizer.has_next():
             self.token, self.start, self.end = self.tokenizer.peek()
             if is_function(self.token):
@@ -188,6 +207,8 @@ class Parser(object):
             raise ParseException(message, line, token, start, end)
 
     def enclosure(self):
+        '''Rule:
+        enclosure ::= parentheses | absolute_value'''
         self.token, self.start, self.end = self.tokenizer.peek()
         if self.token == '(':
             next(self.tokenizer)
@@ -204,6 +225,8 @@ class Parser(object):
             raise ParseException(message, expression, token, start, end)
 
     def parentheses(self):
+        '''Rule:
+        parentheses ::= "(" begin ")"'''
         tree = self.begin()
         if self.tokenizer.has_next():
             token, start, end = self.tokenizer.peek()
@@ -222,6 +245,8 @@ class Parser(object):
             raise ParseException(message, expression, token, start, end)
 
     def absolute_value(self):
+        '''Rule:
+        absolute_value ::= "|" begin "|"''''
         tree = self.begin()
         if self.tokenizer.has_next():
             token, start, end = self.tokenizer.peek()
@@ -242,11 +267,15 @@ class Parser(object):
             raise ParseException(message, expression, token, start, end)
 
     def function(self):
+        '''Rule:
+        function ::= <valid function name> enclosure'''
         token, _, _ = next(self.tokenizer)
         tree = self.enclosure()
         return UnaryFunction(token, tree)
 
     def variable(self):
+        '''Rule:
+        variable ::= <valid variable name>'''
         token, start, end = next(self.tokenizer)
         if token in self.illegal_vars:
             message = 'Illegal variable name: ' + token
@@ -254,9 +283,13 @@ class Parser(object):
         return Variable(token)
 
     def int_number(self):
+        '''Rule:
+        int_number ::= <int>'''
         token, _, _ = next(self.tokenizer)
         return Value(int(token))
 
     def float_number(self):
+        '''Rule:
+        float_number ::= <float>'''
         token, _, _ = next(self.tokenizer)
         return Value(float(token))
