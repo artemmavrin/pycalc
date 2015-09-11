@@ -4,10 +4,10 @@ Command-line calculator written in Python 3.
 
 ## Usage
 
-Download `pycalc.py` and the `pycalc` directory to the same directory.
-In the terminal, `cd` to this directory, and run
+Download `pycalc/` directory.
+In the terminal, `cd` to the directory containing `pycalc/`, and run
 
-    $ python3 pycalc.py
+    $ python3 pycalc
 
 You should see something like this:
 
