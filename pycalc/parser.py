@@ -2,7 +2,8 @@
 
 The context-free grammar for the PyCalc language is as follows:
 
-begin ::= add_or_sub
+begin ::= (variable '=')* expression
+expression ::= add_or_sub
 add_or_sub ::= mul_or_div (('+'|'-') mul_or_div)*
 mul_or_div ::= negative (('*'|'/') negative)*
 negative ::= exponent | '-' negative
@@ -10,8 +11,8 @@ exponent ::= factorial | factorial '^' negative
 factorial ::= atom ('!')*
 atom ::= function | variable | int_number | float_number | enclosure
 enclosure ::= parentheses | absolute_value
-parentheses ::= '(' begin ')'
-absolute_value ::= '|' begin '|'
+parentheses ::= '(' expression ')'
+absolute_value ::= '|' expression '|'
 function ::= <valid function name> enclosure
 variable ::= <valid variable name>
 int_number ::= <int>
@@ -43,6 +44,8 @@ class Parser(object):
 
     def parse(self, line):
         '''Begin parsing the given line.'''
+        # Start at the first grammar rule:
+        # begin ::= (variable '=')* expression
         # Turn the line into variable names and an arithemtic expression.
         line = line.strip()
         *self.names, self.expression = line.split('=')
@@ -63,7 +66,7 @@ class Parser(object):
 
         # Parse expression according to grammar rules
         self.tokenizer = Tokenizer(self.expression)
-        self.tree = self.begin()
+        self.tree = self.expression()
 
         # the tokenizer should be out of tokens
         if self.tokenizer.has_next():
@@ -73,21 +76,24 @@ class Parser(object):
 
     # Everything below corresponds to the grammar rules described at the top.
 
-    def begin(self):
+    def expression(self):
         '''Rule:
-        begin ::= add_or_sub'''
+        expression ::= add_or_sub'''
         return self.add_or_sub()
 
     def add_or_sub(self):
         '''Rule:
         add_or_sub ::= mul_or_div (("+"|"-") mul_or_div)*'''
         first_tree = self.mul_or_div()
+        # Arrays for storing successive + or - operations and the tree args.
         ops = []
         trees = []
+        # Run until no more + or -'s
         while True:
             if self.tokenizer.has_next():
                 self.token, self.start, self.end = self.tokenizer.peek()
                 if self.token in ('+', '-'):
+                    # pop the token off the stack
                     next(self.tokenizer)
                     ops.append(self.token)
                     trees.append(self.mul_or_div())
@@ -96,6 +102,7 @@ class Parser(object):
             else:
                 break
         if trees:
+            # Combine the trees (left-associative)
             result_tree = first_tree
             for op, tree in zip(ops, trees):
                 result_tree = BinaryOperation(op, result_tree, tree)
@@ -107,12 +114,15 @@ class Parser(object):
         '''Rule:
         mul_or_div ::= negative (("*"|"/") negative)*'''
         first_tree = self.negative()
+        # Arrays for storing successive * or / operations and the tree args.
         ops = []
         trees = []
+        # Run until no more * or /'s
         while True:
             if self.tokenizer.has_next():
                 self.token, self.start, self.end = self.tokenizer.peek()
                 if self.token in ('*', '/'):
+                    # pop the token off the stack
                     next(self.tokenizer)
                     ops.append(self.token)
                     trees.append(self.negative())
@@ -121,6 +131,7 @@ class Parser(object):
             else:
                 break
         if trees:
+            # Combine the trees (left-associative)
             result_tree = first_tree
             for op, tree in zip(ops, trees):
                 result_tree = BinaryOperation(op, result_tree, tree)
@@ -132,6 +143,7 @@ class Parser(object):
         '''Rule:
         negative ::= exponent | "-" negative'''
         if self.tokenizer.has_next():
+            # Check for leading minus sign
             self.token, self.start, self.end = self.tokenizer.peek()
             if self.token == '-':
                 next(self.tokenizer)
@@ -141,6 +153,7 @@ class Parser(object):
                 return self.exponent()
             pass
         else:
+            # There should still be tokens on the stack at this point.
             message = 'Expected token after ' + self.token
             expression = self.expression
             token = self.token
@@ -165,6 +178,7 @@ class Parser(object):
         factorial ::= atom ("!")*'''
         first_tree = self.atom()
         num_factorial = 0
+        # Run until no more !'s
         while True:
             if self.tokenizer.has_next():
                 self.token, self.start, self.end = self.tokenizer.peek()
@@ -199,6 +213,7 @@ class Parser(object):
             else:
                 return self.enclosure()
         else:
+            # There should still be tokens on the stack at this point.
             message = 'Expected token after ' + self.token
             line = self.expression
             token = self.token
@@ -211,12 +226,15 @@ class Parser(object):
         enclosure ::= parentheses | absolute_value'''
         self.token, self.start, self.end = self.tokenizer.peek()
         if self.token == '(':
+            # Pop the token off.
             next(self.tokenizer)
             return self.parentheses()
         elif self.token == '|':
+            # Pop the token off.
             next(self.tokenizer)
             return self.absolute_value()
         else:
+            # There should still be tokens on the stack at this point.
             message = 'Expected token after ' + self.token
             expression = self.expression
             token = self.token
@@ -226,8 +244,8 @@ class Parser(object):
 
     def parentheses(self):
         '''Rule:
-        parentheses ::= "(" begin ")"'''
-        tree = self.begin()
+        parentheses ::= "(" expression ")"'''
+        tree = self.expression()
         if self.tokenizer.has_next():
             token, start, end = self.tokenizer.peek()
             if token == ')':
@@ -246,8 +264,8 @@ class Parser(object):
 
     def absolute_value(self):
         '''Rule:
-        absolute_value ::= "|" begin "|"''''
-        tree = self.begin()
+        absolute_value ::= "|" expression "|"''''
+        tree = self.expression()
         if self.tokenizer.has_next():
             token, start, end = self.tokenizer.peek()
             if token == '|':
