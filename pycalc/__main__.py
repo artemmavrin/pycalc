@@ -27,7 +27,8 @@ class PyCalc(object):
         self.help = help_command
         self.delete = delete_command
         illegal_vars = [self.quit, self.vars, self.help, self.delete]
-        self.parser = Parser(illegal_vars=illegal_vars)
+        default_variable = 'ans'
+        self.parser = Parser(illegal_vars, default_variable)
         self.comment = comment
 
     def compute(self, line):
