@@ -94,7 +94,7 @@ class PyCalc(object):
             print('There are no variables to delete.')
 
     def __call__(self):
-        print('PyCalc -- Python PyCalc')
+        print('PyCalc -- Python Calculator')
         print("Type '" + self.help + "' for help.")
 
         while True:
