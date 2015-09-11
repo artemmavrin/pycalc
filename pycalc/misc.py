@@ -1,4 +1,5 @@
 def print_table(table, sep=' '):
+    '''Print a table (a list of lists) with proper column spacing.'''
     table = list(table)
     if table:
         # check if each row in the table has the same number of items
@@ -15,6 +16,18 @@ def print_table(table, sep=' '):
 
 
 def print_iterable(iterable, max_length=80, sep=' ', end='\n'):
+    '''Pretty-print an iterable object to the console.
+
+    Args:
+        iterable : iterable
+            The iterable object to be printed
+        max_length : int (optional)
+            The width of the console.
+        sep : str (optional)
+            The separator to be printed in between elements of the iterator.
+        end : str (optional)
+            The string to print at the end.
+    '''
     spaces_used = 0
     xs = iter(iterable)
     try:
@@ -43,5 +56,7 @@ def print_iterable(iterable, max_length=80, sep=' ', end='\n'):
 
 
 def underline_substring(string, start, end, underline_char='^'):
+    '''Print a string to the console and highlight a segment of it on the next
+    line.'''
     print(string)
     print(start * ' ' + (end - start) * underline_char)
