@@ -2,8 +2,8 @@
 
 The context-free grammar for the PyCalc language is as follows:
 
-begin ::= (variable '=')* expression
-expression ::= add_or_sub
+begin ::= (variable '=')* expr
+expr ::= add_or_sub
 add_or_sub ::= mul_or_div (('+'|'-') mul_or_div)*
 mul_or_div ::= negative (('*'|'/') negative)*
 negative ::= exponent | '-' negative
@@ -11,8 +11,8 @@ exponent ::= factorial | factorial '^' negative
 factorial ::= atom ('!')*
 atom ::= function | variable | int_number | float_number | enclosure
 enclosure ::= parentheses | absolute_value
-parentheses ::= '(' expression ')'
-absolute_value ::= '|' expression '|'
+parentheses ::= '(' expr ')'
+absolute_value ::= '|' expr '|'
 function ::= <valid function name> enclosure
 variable ::= <valid variable name>
 int_number ::= <int>
@@ -66,7 +66,7 @@ class Parser(object):
 
         # Parse expression according to grammar rules
         self.tokenizer = Tokenizer(self.expression)
-        self.tree = self.expression()
+        self.tree = self.expr()
 
         # the tokenizer should be out of tokens
         if self.tokenizer.has_next():
@@ -76,9 +76,9 @@ class Parser(object):
 
     # Everything below corresponds to the grammar rules described at the top.
 
-    def expression(self):
+    def expr(self):
         '''Rule:
-        expression ::= add_or_sub'''
+        expr ::= add_or_sub'''
         return self.add_or_sub()
 
     def add_or_sub(self):
@@ -244,8 +244,8 @@ class Parser(object):
 
     def parentheses(self):
         '''Rule:
-        parentheses ::= "(" expression ")"'''
-        tree = self.expression()
+        parentheses ::= "(" expr ")"'''
+        tree = self.expr()
         if self.tokenizer.has_next():
             token, start, end = self.tokenizer.peek()
             if token == ')':
@@ -264,8 +264,8 @@ class Parser(object):
 
     def absolute_value(self):
         '''Rule:
-        absolute_value ::= "|" expression "|"'''
-        tree = self.expression()
+        absolute_value ::= "|" expr "|"'''
+        tree = self.expr()
         if self.tokenizer.has_next():
             token, start, end = self.tokenizer.peek()
             if token == '|':
