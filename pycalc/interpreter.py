@@ -2,6 +2,7 @@ from cmd import Cmd
 from itertools import chain
 from math import e, pi
 from re import compile
+import os
 
 from lang import is_variable
 from parser import Parser, ParseException
@@ -23,11 +24,6 @@ class PyCalcInterpreter(Cmd):
         default_variable = 'ans'
         self.parser = Parser(illegal_vars, default_variable)
         self.comment = '#'
-
-    def precmd(self, line):
-        '''Strip comments from the line.'''
-        return line.split(self.comment)[0].strip()
-
 
     def default(self, line):
         '''Evaluate the given expression.'''
@@ -104,3 +100,13 @@ class PyCalcInterpreter(Cmd):
                 value = self.variables[name]
                 var_table.append([name, value, type(value).__name__])
             print_table(var_table)
+
+    def preloop(self):
+        os.system('clear')
+
+    def postloop(self):
+        os.system('clear')
+
+    def precmd(self, line):
+        '''Strip comments from the line.'''
+        return line.split(self.comment)[0].strip()
