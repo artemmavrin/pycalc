@@ -224,18 +224,26 @@ class Parser(object):
     def enclosure(self):
         '''Rule:
         enclosure ::= parentheses | absolute_value'''
-        self.token, self.start, self.end = self.tokenizer.peek()
-        if self.token == '(':
-            # Pop the token off.
-            next(self.tokenizer)
-            return self.parentheses()
-        elif self.token == '|':
-            # Pop the token off.
-            next(self.tokenizer)
-            return self.absolute_value()
+        if self.tokenizer.has_next():
+            self.token, self.start, self.end = self.tokenizer.peek()
+            if self.token == '(':
+                # Pop the token off.
+                next(self.tokenizer)
+                return self.parentheses()
+            elif self.token == '|':
+                # Pop the token off.
+                next(self.tokenizer)
+                return self.absolute_value()
+            else:
+                message = 'Expected left delimiter, but found ' + self.token
+                expression = self.expression
+                token = self.token
+                start = self.start
+                end = self.end
+                raise ParseException(message, expression, token, start, end)
         else:
             # There should still be tokens on the stack at this point.
-            message = 'Expected token after ' + self.token
+            message = 'Expected delimited expression after ' + self.token
             expression = self.expression
             token = self.token
             start = self.start
