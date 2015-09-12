@@ -35,7 +35,7 @@ class AST(metaclass=ABCMeta):
         pass
 
     @abstractmethod
-    def set_variables(self, variables):
+    def set_vars(self, variables):
         '''Assign values to variables in the leaf nodes.'''
         # Implemented in subclass.
         pass
@@ -63,8 +63,8 @@ class Branch(AST, metaclass=ABCMeta):
         '''Evaluate the children, then apply the function to the results.'''
         return self.f(*(arg.evaluate() for arg in self.args))
 
-    def set_variables(self, variables):
-        return all(arg.set_variables(variables) for arg in self.args)
+    def set_vars(self, variables):
+        return all(arg.set_vars(variables) for arg in self.args)
 
     def postfix(self):
         arguments = ' '.join(arg.postfix() for arg in self.args)
@@ -104,7 +104,7 @@ class Leaf(AST, metaclass=ABCMeta):
     def evaluate(self):
         return self.value
 
-    def set_variables(self, variables):
+    def set_vars(self, variables):
         return True
 
     def postfix(self):
@@ -130,7 +130,7 @@ class Variable(Leaf):
             message = 'The variable ' + self.name + ' has no value.'
             raise UnboundLocalError(message)
 
-    def set_variables(self, variables):
+    def set_vars(self, variables):
         # Try to assign a value to the variable name.
         if self.name in variables:
             self.value = variables[self.name]
