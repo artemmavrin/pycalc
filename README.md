@@ -1,6 +1,6 @@
 # pycalc - Python Calculator
 
-Command-line calculator written in Python 3.
+Calculator terminal application written in Python 3.
 
 ## Usage
 
