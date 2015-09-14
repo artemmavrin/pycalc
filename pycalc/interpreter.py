@@ -2,8 +2,6 @@ from cmd import Cmd
 from itertools import chain
 from math import e, pi
 from re import compile
-import os
-import sys
 
 from lang import is_variable
 from parser import Parser, ParseException
@@ -101,20 +99,6 @@ class PyCalcInterpreter(Cmd):
                 value = self.variables[name]
                 var_table.append([name, value, type(value).__name__])
             print_table(var_table)
-
-    def clear_screen(self):
-        if sys.platform.startswith('linux') or sys.platform == 'darwin':
-            # Linux or Max OS X
-            os.system('clear')
-        elif sys.platform == 'win32':
-            # Windows
-            os.system('cls')
-
-    def preloop(self):
-        self.clear_screen()
-
-    def postloop(self):
-        self.clear_screen()
 
     def precmd(self, line):
         '''Strip comments from the line.'''
