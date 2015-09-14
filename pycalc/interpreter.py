@@ -100,6 +100,13 @@ class PyCalcInterpreter(Cmd):
                 var_table.append([name, value, type(value).__name__])
             print_table(var_table)
 
+    def cmdloop(self):
+        try:
+            super().cmdloop()
+        except KeyboardInterrupt:
+            self.intro='\nKeyboard Interrupt'
+            self.cmdloop()
+
     def precmd(self, line):
         '''Strip comments from the line.'''
         return line.split(self.comment)[0].strip()
