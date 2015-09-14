@@ -84,7 +84,7 @@ class PyCalcInterpreter(Cmd):
     def do_help(self, line):
         '''Show the help message.'''
         if line:
-            print('The "help" command does not take any arguments.')
+            super().do_help(line)
         else:
             print(self.help_str)
 
@@ -97,7 +97,7 @@ class PyCalcInterpreter(Cmd):
             return True
 
     def do_vars(self, line):
-        '''Display the stored variables.'''
+        '''Show the stored variables.'''
         if line:
             print('The "vars" command does not take any arguments.')
         elif not self.variables:
@@ -110,9 +110,10 @@ class PyCalcInterpreter(Cmd):
             print_table(var_table)
 
     def do_EOF(self, line):
-        '''Catch Ctrl-D and exit the program.
-        Unfortunately this makes EOF unusable as a variable name, and any line
-        starting with EOF will exit the program.'''
+        '''Exit the program.'''
+        # Catch Ctrl-D and exit the program.
+        # Unfortunately this makes EOF unusable as a variable name, and any line
+        # starting with EOF will exit the program.
         print()
         print('Leaving PyCalc.')
         return True
