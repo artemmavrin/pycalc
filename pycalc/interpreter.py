@@ -59,12 +59,18 @@ class PyCalcInterpreter(Cmd):
             else:
                 names = sorted(self.variables.keys(), key=lambda s: s.lower())
                 deleted = []
-                for pattern in patterns:
-                    regex = compile('^' + pattern + '$')
-                    for name in names:
-                        if regex.match(name) and name in self.variables:
-                            del self.variables[name]
-                            deleted.append(name)
+                try:
+                    for pattern in patterns:
+                        regex = compile('^' + pattern + '$')
+                        for name in names:
+                            if regex.match(name) and name in self.variables:
+                                del self.variables[name]
+                                deleted.append(name)
+                except Exception:
+                    # Catches re's "nothing to repeat" errors
+                    # This happens, for example, for "del *"
+                    # What is a more specific exception in this case?
+                    print('Runtime error: Invalid pattern:', pattern)
                 if deleted:
                     print_iterable(chain(['Delteted:'], deleted))
                 else:
