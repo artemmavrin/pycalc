@@ -39,6 +39,8 @@ class PyCalcInterpreter(Cmd):
         except ParseException as ex:
             print('Runtime error:', str(ex))
             underline_substring(ex.expression, ex.start, ex.end)
+        except KeyboardInterrupt:
+            print('\nInterrupted.')
         except Exception as ex:
             print('Runtime error:', str(ex))
         else:
@@ -91,6 +93,7 @@ class PyCalcInterpreter(Cmd):
         if line:
             print('The "quit" command does not take any arguments.')
         else:
+            print('Leaving PyCalc.')
             return True
 
     def do_vars(self, line):
@@ -111,13 +114,15 @@ class PyCalcInterpreter(Cmd):
         Unfortunately this makes EOF unusable as a variable name, and any line
         starting with EOF will exit the program.'''
         print()
+        print('Leaving PyCalc.')
         return True
 
     def cmdloop(self):
         try:
             super().cmdloop()
         except KeyboardInterrupt:
-            self.intro='\nKeyboard Interrupt'
+            print()
+            self.intro=''
             self.cmdloop()
 
     def precmd(self, line):
