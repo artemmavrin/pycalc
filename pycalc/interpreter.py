@@ -19,7 +19,7 @@ class PyCalcInterpreter(Cmd):
         self.prompt = prompt
         self.help_str = help_str
         self.variables = {}
-        illegal_vars = ['del', 'help', 'quit', 'vars']
+        illegal_vars = ['del', 'help', 'quit', 'vars', 'EOF']
         default_variable = 'ans'
         self.parser = Parser(illegal_vars, default_variable)
         self.comment = '#'
@@ -99,6 +99,13 @@ class PyCalcInterpreter(Cmd):
                 value = self.variables[name]
                 var_table.append([name, value, type(value).__name__])
             print_table(var_table)
+
+    def do_EOF(self, line):
+        '''Catch Ctrl-D and exit the program.
+        Unfortunately this makes EOF unusable as a variable name, and any line
+        starting with EOF will exit the program.'''
+        print()
+        return True
 
     def cmdloop(self):
         try:
