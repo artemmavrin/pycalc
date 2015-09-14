@@ -36,6 +36,8 @@ class PyCalcInterpreter(Cmd):
                     self.variables[name] = self.value
             else:
                 raise Exception('Encountered unknown variable.')
+            print_iterable(self.names, sep=', ', end=' =\n')
+            print('    ' + str(self.value))
         except ParseException as ex:
             print('Runtime error:', str(ex))
             underline_substring(ex.expression, ex.start, ex.end)
@@ -43,9 +45,6 @@ class PyCalcInterpreter(Cmd):
             print('\nInterrupted.')
         except Exception as ex:
             print('Runtime error:', str(ex))
-        else:
-            print_iterable(self.names, sep=', ', end=' =\n')
-            print('    ' + str(self.value))
 
     def emptyline(self):
         '''Ignore blank lines.'''
