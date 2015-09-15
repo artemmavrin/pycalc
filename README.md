@@ -1,4 +1,4 @@
-# pycalc - Python Calculator
+# PyCalc - Python Calculator
 
 Calculator terminal application written in Python 3.
 
@@ -6,11 +6,16 @@ Calculator terminal application written in Python 3.
 
 ### Getting started
 
-Download the `pycalc/` directory.
-In the terminal, `cd` to the directory containing `pycalc/`, and run
+Make sure Python 3.4 or later is installed on your system.
+In the terminal, clone this repository:
+
+    $ git clone https://github.com/artemmavrin/pycalc.git
+
+Next, `cd` into `pycalc/`, and run
 
     $ python3 pycalc
 
+This will open the PyCalc terminal application.
 You should see something like this:
 
 ![Screenshot](images/startup.png)
@@ -23,7 +28,7 @@ At the prompt, type arithmetic expressions and hit `ENTER` to have them evaluate
 
 ![Screenshot](images/evaluating-expressions.png)
 
-`pycalc` supports the following operations and functions:
+PyCalc supports the following operations and functions:
 * `+`, `-`, `*`, `/`, `^`: (*infix*) addition, subtraction, multiplication, division, and exponentiation.
 * `!`: (*postfix*) factorial (only defined for non-negative integers).
 * `exp`, `log`, `cos`, `sin`, `tan`: standard transcendental function.
@@ -62,14 +67,14 @@ For more help, type `help` at the prompt:
 
 ### Runtime Errors
 
-If a computation fails, `pycalc` will try to tell you why:
+If a computation fails, PyCalc will try to tell you why:
 
 ![Screenshot](images/runtime-errors.png)
 
 
 ### Command-line Mode
 
-You can also evaluate individual expression straight from the command-line:
+PyCalc can also evaluate individual expression straight from the command-line:
 
     $ python3 pycalc 1+2*3
     ans =
