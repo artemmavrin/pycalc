@@ -65,3 +65,15 @@ For more help, type `help` at the prompt:
 If a computation fails, `pycalc` will try to tell you why:
 
 ![Screenshot](images/runtime-errors.png)
+
+
+### Command-line Mode
+
+You can also evaluate individual expression straight from the command-line:
+
+    $ python3 pycalc 1+2*3
+    ans =
+        7
+    $ python3 pycalc "exp(3)"
+    ans =
+        20.085536923187668
