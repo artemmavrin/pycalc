@@ -7,12 +7,10 @@ Calculator terminal application written in Python 3.
 ### Getting started
 
 Make sure Python 3.4 or later is installed on your system.
-In the terminal, clone this repository:
+Run the following commands in your terminal:
 
     $ git clone https://github.com/artemmavrin/pycalc.git
-
-Next, `cd` into `pycalc/`, and run
-
+    $ cd pycalc
     $ python3 pycalc
 
 This will open the PyCalc terminal application.
