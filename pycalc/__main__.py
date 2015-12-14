@@ -24,10 +24,12 @@ Special commands:
 
 var_fname = '.pycalcvars'
 variables = {}
+# Look for a variables data file in the current directory
 if os.path.isfile(var_fname):
     with open(var_fname, 'rb') as file:
         variables = pickle.load(file)
 
+# Initialize the PyCalc interpreter
 pycalc = PyCalcInterpreter(intro, prompt, help_str, variables)
 
 if len(sys.argv) > 1:
@@ -38,5 +40,6 @@ else:
     # Otherwise, enter interactive mode.
     pycalc.cmdloop()
 
+# Save the updated variables to the disk
 with open(var_fname, 'wb') as file:
     pickle.dump(variables, file)
