@@ -13,12 +13,12 @@ constants = {'e': e, 'pi': pi}
 
 class PyCalcInterpreter(Cmd):
     '''PyCalc command-line intrpreter.'''
-    def __init__(self, intro, prompt, help_str):
+    def __init__(self, intro, prompt, help_str, variables):
         super().__init__()
         self.intro = intro
         self.prompt = prompt
         self.help_str = help_str
-        self.variables = {}
+        self.variables = variables
         illegal_vars = ['del', 'help', 'quit', 'vars', 'EOF']
         default_variable = 'ans'
         self.parser = Parser(illegal_vars, default_variable)

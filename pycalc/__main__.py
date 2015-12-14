@@ -1,4 +1,6 @@
 import sys
+import pickle
+import os.path
 
 from interpreter import PyCalcInterpreter
 
@@ -20,10 +22,21 @@ Special commands:
     help
         View this help message.'''
 
+var_fname = '.pycalcvars'
+variables = {}
+if os.path.isfile(var_fname):
+    with open(var_fname, 'rb') as file:
+        variables = pickle.load(file)
+
+pycalc = PyCalcInterpreter(intro, prompt, help_str, variables)
+
 if len(sys.argv) > 1:
     # If there are command-line arguments, treat them as an expression and
     # try to evaluate it.
-    PyCalcInterpreter(intro, prompt, help_str).onecmd(' '.join(sys.argv[1:]))
+    pycalc.onecmd(' '.join(sys.argv[1:]))
 else:
     # Otherwise, enter interactive mode.
-    PyCalcInterpreter(intro, prompt, help_str).cmdloop()
+    pycalc.cmdloop()
+
+with open(var_fname, 'wb') as file:
+    pickle.dump(variables, file)
