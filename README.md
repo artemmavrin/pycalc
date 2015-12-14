@@ -9,9 +9,9 @@ Calculator terminal application written in Python 3.
 Make sure Python 3.4 or later is installed on your system.
 Run the following commands in your terminal:
 
-    $ git clone https://github.com/artemmavrin/pycalc.git
-    $ cd pycalc
-    $ python3 pycalc
+    git clone https://github.com/artemmavrin/pycalc.git
+    cd pycalc
+    python3 pycalc
 
 This will open the PyCalc terminal application.
 You should see something like this:
