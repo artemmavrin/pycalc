@@ -70,6 +70,15 @@ If a computation fails, PyCalc will try to tell you why:
 ![Screenshot](images/runtime-errors.png)
 
 
+### Persistence
+
+The variables declared in a PyCalc session are saved to a binary file called
+`.pycalcvars`. When PyCalc starts, it looks for this file and loads the
+variables it contains if it is found.
+
+![Screenshot](images/persistence.png)
+
+
 ### Command-line Mode
 
 PyCalc can also evaluate individual expression straight from the command-line:
