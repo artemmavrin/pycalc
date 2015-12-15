@@ -18,7 +18,7 @@ You should see something like this:
 
 ![Screenshot](images/startup.png)
 
-To exit the program, type `quit` at the prompt.
+To exit the program, type `quit` or enter `Ctrl+D` at the prompt.
 
 ### Evaluating Arithmetic Expressions
 
